@@ -285,31 +285,22 @@ class Fish:
     
 
 class AquariumFish(Fish):
-    def __init__(self, name, color, min_tank_size, size=None):
+    def __init__(self, name, color, min_volume_litres, size=None):
         super().__init__(name, color, size)
-        self.min_tank_size = min_tank_size
+        self.min_volume_litres = min_volume_litres
     
 
     @property
-    def min_tank_size(self):
-        return self._min_tank_size
+    def min_volume_litres(self):
+        return self._min_volume_litres
         
-    @min_tank_size.setter
-    def min_tank_size(self, min_tank_size):
-        if not min_tank_size:
+    @min_volume_litres.setter
+    def min_volume_litres(self, min_volume_litres):
+        if not min_volume_litres:
             raise ValueError("Missing minimum tank size")
-        if min_tank_size < 1:
-            raise ValueError("Minimum size should be positive integer")
-        self._min_tank_size = min_tank_size
-
-
-    # @classmethod
-    # def get(cls):
-    #     """Override get method for AquariumFish-specific attributes."""
-    #     fish = super().get()  # Get common Fish attributes (name, color)
-    #     min_tank_size = float(input("Minimum tank size: "))
-    #     # Return an instance of AquariumFish with all attributes
-    #     return cls(fish.name, fish.color, min_tank_size, fish.size)
+        if min_volume_litres < 1:
+            raise ValueError("Minimum volume should be positive integer")
+        self._min_volume_litres = min_volume_litres
     
 
 class WildNatureFish(Fish):
@@ -328,13 +319,55 @@ class WildNatureFish(Fish):
         self._waterbody = waterbody
 
 
-def main():
-    fish: Fish = Fish.get()
-    print(fish.color)
+# def main():
+#     fish: Fish = Fish.get()
+#     print(fish.color)
 
-    tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
-    print(tank_fish)
-    print(tank_fish.color, tank_fish.name)
+#     tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
+#     print(tank_fish)
+#     print(tank_fish.color, tank_fish.name)
+
+
+
+
+
+
+
+# Operator overloading
+
+
+class FishTank:
+    def __init__(self, size):
+        self.size = size
+
+    def __str__(self):
+        return f"Total size is {self.size}"
+
+    def __add__(self, other):
+        return self.size + other.size
+    
+    def __sub__(self, other):
+        return self.size - other.size
+    
+
+
+def main():
+    molly_to_buy: int = 3
+    molly: AquariumFish = AquariumFish('Molly', 'Black', 10 * molly_to_buy)
+
+    guppy_to_buy: int = 5
+    guppy: AquariumFish = AquariumFish('Guppy', 'Silver', 5 * guppy_to_buy)
+
+    molly_tank: FishTank = FishTank(molly.min_volume_litres)
+    guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
+
+    print(molly_tank)
+    print(guppy_tank)
+
+    general_tank: FishTank = molly_tank + guppy_tank
+    print(general_tank)
+
+
 
 
 if __name__ == "__main__":
