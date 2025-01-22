@@ -262,7 +262,7 @@ class Fish:
         self.size = size
 
     def __str__(self):
-        print(f"Name: {self._name}. Color: {self.color}")
+        return f"Name: {self._name}. Color: {self.color}"
 
     @property
     def name(self):
@@ -276,10 +276,10 @@ class Fish:
 
     @classmethod
     def get(cls):
-        # name: str = input("Name: ")
-        # color: str = input("Color: ")
-        name: str = "Molly"
-        color: str = "Black"
+        name: str = input("Name: ")
+        color: str = input("Color: ")
+        # name: str = "Molly"
+        # color: str = "Black"
         return cls(name, color)
 
     
@@ -288,6 +288,7 @@ class AquariumFish(Fish):
     def __init__(self, name, color, min_tank_size, size=None):
         super().__init__(name, color, size)
         self.min_tank_size = min_tank_size
+    
 
     @property
     def min_tank_size(self):
@@ -301,6 +302,14 @@ class AquariumFish(Fish):
             raise ValueError("Minimum size should be positive integer")
         self._min_tank_size = min_tank_size
 
+
+    # @classmethod
+    # def get(cls):
+    #     """Override get method for AquariumFish-specific attributes."""
+    #     fish = super().get()  # Get common Fish attributes (name, color)
+    #     min_tank_size = float(input("Minimum tank size: "))
+    #     # Return an instance of AquariumFish with all attributes
+    #     return cls(fish.name, fish.color, min_tank_size, fish.size)
     
 
 class WildNatureFish(Fish):
@@ -313,17 +322,18 @@ class WildNatureFish(Fish):
         return self._waterbody
     
     @waterbody.setter
-    def waterbody(self, waterbody):
-        if not waterbody in super().waterbodies:
+    def waterbody(self, cls, waterbody):
+        if not waterbody in cls.waterbodies:
             raise ValueError("Missing waterbody")
         self._waterbody = waterbody
 
 
 def main():
     fish: Fish = Fish.get()
-    # print(fish)
-    # tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
-    tank_fish: AquariumFish = AquariumFish("Molly", "Silver", 55)
+    print(fish.color)
+
+    tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
+    print(tank_fish)
     print(tank_fish.color, tank_fish.name)
 
 
