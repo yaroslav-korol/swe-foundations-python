@@ -361,13 +361,47 @@ def main():
     molly_tank: FishTank = FishTank(molly.min_volume_litres)
     guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
 
-    print(molly_tank)
-    print(guppy_tank)
+    # print(molly_tank)
+    # print(guppy_tank)
 
     general_tank: FishTank = molly_tank + guppy_tank
-    print(general_tank)
+    # print(general_tank)
 
 
+
+
+# Class variables
+
+class StoreSoldItems:
+    sold_items: int = 0
+    uah_to_usd_rate: float = 42.00
+
+    def __init__(self, item_type: str, item_brand: str, item_price_usd: float):
+        self.item_type = item_type
+        self.item_brand = item_brand
+        self.item_price_usd = item_price_usd
+        StoreSoldItems.sold_items += 1
+
+    def get_price_uah(self):
+        return self.item_price_usd * self.uah_to_usd_rate
+        # return self.item_price_usd * StoreSoldItems.uah_to_usd_rate
+    
+    def __str__(self):
+        return f"{self.item_brand} {self.item_type} current price is {self.get_price_uah()} UAH"
+        
+def main():
+    laptop: StoreSoldItems = StoreSoldItems('laptop', 'Apple', 2500, )
+    phone: StoreSoldItems = StoreSoldItems('phone', 'Samsung', 1500, )
+    print(f"Total items sold: {StoreSoldItems.sold_items}")
+
+    # Use cases when better to modify class variables by instance not class call
+    print(laptop)
+    laptop.uah_to_usd_rate = 42.5
+    print(laptop)
+
+    # We can call instance method from class by passing instance instead of self
+    print(phone.get_price_uah())
+    print(StoreSoldItems.get_price_uah(phone))
 
 
 if __name__ == "__main__":
