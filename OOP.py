@@ -382,6 +382,11 @@ class StoreSoldItems:
     def update_rate(cls, new_rate_uah: float):
         cls.uah_to_usd_rate = new_rate_uah
 
+    @classmethod
+    def from_string(cls, item_string):
+        parsed_type, parsed_brand, parsed_price = item_string.split("-")
+        return cls(parsed_type, parsed_brand, int(parsed_price))
+
     @staticmethod
     def get_uah_rate():
         # url_endpoint = 'some_url_api'
@@ -412,6 +417,11 @@ def main():
     print(phone)
     StoreSoldItems.update_rate(45.00)
     print(phone)
+
+    # Classmethod as alternative constructor
+    item_string: str = "toaster-gorenje-50"
+    toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
+    print(toaster)
 
     # Use staticmethod to get current rate
     new_rate = StoreSoldItems.get_uah_rate()
