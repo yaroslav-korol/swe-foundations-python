@@ -255,7 +255,7 @@ new_planet = BigBang.create_planet()
 
 
 class Fish:
-    waterbodies: list[str] = ["river", "lake", "pond", "canal", "tank"]
+    waterbodies: list[str] = ["river", "lake", "pond", "canal", "aquarium"]
 
     def __init__(self, name: str, color: str, size: float = None) -> None:
         self.name = name
@@ -277,11 +277,27 @@ class Fish:
 
     @classmethod
     def get(cls):
-        name: str = input("Name: ")
-        color: str = input("Color: ")
-        # name: str = "Molly"
-        # color: str = "Black"
+        # name: str = input("Name: ")
+        # color: str = input("Color: ")
+        name: str = "Molly"
+        color: str = "Black"
         return cls(name, color)
+
+    @classmethod
+    def add_waterbody(cls, waterbody):
+        if waterbody not in cls.waterbodies:
+            cls.waterbodies.append(waterbody)
+            print(f"{waterbody} added to waterbodies list successfully")
+        else:
+            print(f"{waterbody} already present")
+
+    @classmethod
+    def remove_waterbody(cls, waterbody):
+        if waterbody in cls.waterbodies:
+            cls.waterbodies.remove(waterbody)
+            print(f"{waterbody} removed from waterbodies list successfully")
+        else:
+            print(f"There is no {waterbody} in the list")
 
 
 class AquariumFish(Fish):
@@ -318,13 +334,27 @@ class WildNatureFish(Fish):
         self._waterbody = waterbody
 
 
-# def main():
-#     fish: Fish = Fish.get()
-#     print(fish.color)
+def main():
+    fish: Fish = Fish.get()
+    print(fish.color)
 
-#     tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
-#     print(tank_fish)
-#     print(tank_fish.color, tank_fish.name)
+    tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
+    print(tank_fish)
+    print(tank_fish.color, tank_fish.name)
+
+    # Inheritance builtin test methods
+    print(isinstance(fish, Fish))
+    print(issubclass(AquariumFish, Fish))
+
+    # Check if class methods inherited to subclass instance
+    print(tank_fish.waterbodies)
+    tank_fish.add_waterbody("wine glass")
+    print(tank_fish.waterbodies)
+
+    tank_fish.remove_waterbody("wine glass")
+    print(tank_fish.waterbodies)
+
+    tank_fish.remove_waterbody("doesn't exist")
 
 
 # Operator overloading
@@ -344,21 +374,21 @@ class FishTank:
         return self.size - other.size
 
 
-def main():
-    molly_to_buy: int = 3
-    molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
+# def main():
+#     molly_to_buy: int = 3
+#     molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
 
-    guppy_to_buy: int = 5
-    guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
+#     guppy_to_buy: int = 5
+#     guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
 
-    molly_tank: FishTank = FishTank(molly.min_volume_litres)
-    guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
+#     molly_tank: FishTank = FishTank(molly.min_volume_litres)
+#     guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
 
-    # print(molly_tank)
-    # print(guppy_tank)
+#     print(molly_tank)
+#     print(guppy_tank)
 
-    general_tank: FishTank = molly_tank + guppy_tank
-    # print(general_tank)
+#     general_tank: FishTank = molly_tank + guppy_tank
+#     print(general_tank)
 
 
 # Class variables, Class Methods, Static Methods
@@ -399,34 +429,34 @@ class StoreSoldItems:
         return f"{self.item_brand} {self.item_type} current price is {self.get_price_uah()} UAH"
 
 
-def main():
-    laptop: StoreSoldItems = StoreSoldItems("laptop", "Apple", 2500)
-    phone: StoreSoldItems = StoreSoldItems("phone", "Samsung", 1500)
-    print(f"Total items sold: {StoreSoldItems.sold_items}")
+# def main():
+#     laptop: StoreSoldItems = StoreSoldItems("laptop", "Apple", 2500)
+#     phone: StoreSoldItems = StoreSoldItems("phone", "Samsung", 1500)
+#     print(f"Total items sold: {StoreSoldItems.sold_items}")
 
-    # Use cases when better to modify class variables by instance not class call
-    print(laptop)
-    laptop.uah_to_usd_rate = 42.5
-    print(laptop)
+#     # Use cases when better to modify class variables by instance not class call
+#     print(laptop)
+#     laptop.uah_to_usd_rate = 42.5
+#     print(laptop)
 
-    # We can call instance method from class by passing instance instead of self
-    print(phone.get_price_uah())
-    print(StoreSoldItems.get_price_uah(phone))
+#     # We can call instance method from class by passing instance instead of self
+#     print(phone.get_price_uah())
+#     print(StoreSoldItems.get_price_uah(phone))
 
-    # Use classmethod to update class variable
-    print(phone)
-    StoreSoldItems.update_rate(45.00)
-    print(phone)
+#     # Use classmethod to update class variable
+#     print(phone)
+#     StoreSoldItems.update_rate(45.00)
+#     print(phone)
 
-    # Classmethod as alternative constructor
-    item_string: str = "toaster-gorenje-50"
-    toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
-    print(toaster)
+#     # Classmethod as alternative constructor
+#     item_string: str = "toaster-gorenje-50"
+#     toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
+#     print(toaster)
 
-    # Use staticmethod to get current rate
-    new_rate = StoreSoldItems.get_uah_rate()
-    StoreSoldItems.update_rate(new_rate)
-    print(phone)
+#     # Use staticmethod to get current rate
+#     new_rate = StoreSoldItems.get_uah_rate()
+#     StoreSoldItems.update_rate(new_rate)
+#     print(phone)
 
 
 if __name__ == "__main__":
