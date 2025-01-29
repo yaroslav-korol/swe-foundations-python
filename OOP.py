@@ -72,70 +72,82 @@
 #     print(desirable_car())
 
 
-# 3. GETters and SETters
-
-# class Car:
-#     colors: list[str] = ['black', 'silver', 'white', 'red']
-
-#     def __init__(self, brand, color, model=None):
-#         self.brand = brand
-#         self.color = color
-#         self.model = model
-
-#     @property
-#     def brand(self):
-#         return self._brand
-
-#     @brand.setter
-#     def brand(self, brand):
-#         if not brand:
-#             raise ValueError("Missing brand")
-#         self._brand = brand
-
-#     @property
-#     def color(self):
-#         return self.____color
-
-#     @color.setter
-#     def color(self, color):
-#         if color not in self.colors:
-#             raise ValueError("Invalid color option")
-#         self.____color = color
+# 3. GETters. SETters and DELETErs
 
 
-#     def __str__(self):
-#         return f"Brand: {self.brand}. Color: {self.color}. Model: {self.model}"
+class Car:
+    colors: list[str] = ["black", "silver", "white", "red"]
+
+    def __init__(self, car_brand, car_color, model=None):
+        self.brand = car_brand
+        self.color = car_color
+        self.model = model
+
+    @property
+    def brand(self):
+        return self._brand
+
+    @brand.setter
+    def brand(self, car_brand):
+        # if not car_brand:
+        #     raise ValueError("Missing brand")
+        self._brand = car_brand
+
+    @brand.deleter
+    def brand(self):
+        print(f"Delete {self.brand}")
+        self._brand = None
+
+    @property
+    def color(self):
+        return self.____color
+
+    @color.setter
+    def color(self, car_color):
+        if car_color not in self.colors:
+            raise ValueError("Invalid color option")
+        self.____color = car_color
+
+    def __str__(self):
+        return f"Brand: {self.brand}. Color: {self.color}. Model: {self.model}"
 
 
-# def main():
-#     car = desirable_car()
-#     print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
-#     car.color = 'black'
-#     print(f"New color of {car.brand} is {car.color} now")
+def main():
+    car = desirable_car()
+    print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
+    car.color = "black"
+    print(f"New color of {car.brand} is {car.color} now")
+    print()
 
-#     car.new_variable = "some value"
-#     print(car)
-#     print(car.new_variable)
+    # Use custom deleter function to unset color value
+    test_deleter_car = Car("BMW", "black", "700")
+    print(test_deleter_car)
+    del test_deleter_car.brand
+    print(test_deleter_car)
+    print()
 
-#     print('\n')
+    # We can add any new instance variable even if it is not declared in __init__
+    car.new_variable = "some value"
+    print(car)
+    print(car.new_variable)
+    print()
 
-#     car._color = 'blue HA_HA_HA!'
-#     print(car)
+    # # How python trust concept (conventions) works
+    car._color = "blue HA_HA_HA!"
+    print(car)
 
 
-# car_2 = Car('Opel', 'blue', 'Omega')
+# Test setters Error raise
+# car_2 = Car("Opel", "blue", "Omega")
 # print(car_2)
 
-# car_3 = Car('', 'black', '911')
+# car_3 = Car("", "black", "911")
 # print(car_3)
 
 
-# def desirable_car():
-#     return Car('Tesla', 'silver', 'S')
+def desirable_car():
+    return Car("Tesla", "silver", "S")
 
-
-# if __name__ == "__main__":
-#     main()
 
 #     print('\n\n')
 #     print(Car)
@@ -148,7 +160,7 @@
 # 3.1 Encapsulating all related functionality
 
 
-class Car:
+class CarFull:
     colors: list[str] = [
         "black",
         "white",
@@ -196,7 +208,7 @@ class Car:
 
 
 # def main():
-#     dream_car = Car.get()
+#     dream_car = CarFull.get()
 #     print(dream_car)
 
 
@@ -473,12 +485,12 @@ class MyDbConnectionManager:
         return True  # Suppresses exceptions if they occur
 
 
-def main():
-    for i in MyRange(6):
-        print(i)
+# def main():
+#     for i in MyRange(6):
+#         print(i)
 
-    with MyDbConnectionManager("My_DB_Engine") as db:
-        print(f"Connected to Database: {db.connected}")
+#     with MyDbConnectionManager("My_DB_Engine") as db:
+#         print(f"Connected to Database: {db.connected}")
 
 
 # Class variables, Class Methods, Static Methods
