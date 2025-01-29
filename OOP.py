@@ -375,42 +375,110 @@ class FishTank:
         return f"Total size is {self.size}"
 
     def __repr__(self):
-        return f"FishTank({self.size})"
+        return f"FishTank(size={self.size})"
 
     def __add__(self, other):
-        return self.size + other.size
+        if isinstance(other, FishTank):
+            return self.size + other.size
+        raise TypeError("Invalid type")
 
     def __sub__(self, other):
-        return self.size - other.size
+        if isinstance(other, FishTank):
+            return self.size - other.size
+        raise TypeError("Invalid type")
+
+
+# def main():
+#     molly_to_buy: int = 3
+#     molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
+
+#     guppy_to_buy: int = 5
+#     guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
+
+#     molly_tank: FishTank = FishTank(molly.min_volume_litres)
+#     guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
+
+#     print(molly_tank)
+#     print(guppy_tank)
+#     print()
+
+#     general_tank: FishTank = molly_tank + guppy_tank
+#     print(general_tank)
+#     print()
+
+#     # __str__ VS __repr__
+#     print(molly_tank)
+#     print(str(molly_tank))
+#     print(molly_tank.__str__())
+
+#     print(repr(molly_tank))
+#     print(molly_tank.__repr__())
+#     print()
+
+#     # Magic methods in built-in classes
+#     print(int.__add__(2, 1))
+#     print("hello".__add__(" world"))
+#     print(str.__len__("some test string"))
+
+
+# EXAMPLES OF CREATING CUSTOM CONTEXT MANAGERS AND ITERATORS by using related magic methods
+
+
+# CUSTOM RANGE Class Implementation
+class MyRange:
+    def __init__(self, start_value):
+        self.start_value = start_value
+
+    @property
+    def start_value(self):
+        return self._start_value
+
+    @start_value.setter
+    def start_value(self, start_value):
+        if isinstance(start_value, int):
+            self._start_value = start_value
+        else:
+            raise TypeError("Invalid Type")
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.start_value > 0:
+            current = self.start_value
+            self.start_value -= 1
+            return current
+        raise StopIteration
+
+
+# CUSTOM CONTEXT MANAGER Implementation
+class MyDbConnectionManager:
+    "Simulate a DataBase Connection with custom context manager"
+
+    def __init__(self, db_name):
+        self.db_name = db_name
+        self.connected = False
+
+    def __enter__(self):
+        self.connected = True
+        print(f"Connected to {self.db_name}")
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.connected = False
+        print(f"Disconnected from {self.db_name}")
+        # Handle exceptions
+        if exc_type:
+            print(f"An exception occurred: {exc_value}")
+        return True  # Suppresses exceptions if they occur
 
 
 def main():
-    molly_to_buy: int = 3
-    molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
+    for i in MyRange(6):
+        print(i)
 
-    guppy_to_buy: int = 5
-    guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
-
-    molly_tank: FishTank = FishTank(molly.min_volume_litres)
-    guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
-
-    print(molly_tank)
-    print(guppy_tank)
-
-    general_tank: FishTank = molly_tank + guppy_tank
-    print(general_tank)
-
-    # __str__ VS __repr__
-    print(molly_tank)
-    print(str(molly_tank))
-    print(molly_tank.__str__())
-
-    print(repr(molly_tank))
-    print(molly_tank.__repr__())
-
-    # Magic methods in built-in classes
-    print(int.__add__(2, 1))
-    print(str.__len__("some test string"))
+    with MyDbConnectionManager("My_DB_Engine") as db:
+        print(f"Connected to Database: {db.connected}")
 
 
 # Class variables, Class Methods, Static Methods
