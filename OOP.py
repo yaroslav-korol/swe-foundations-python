@@ -195,29 +195,36 @@ class Car:
         return cls(brand, color, model)
 
 
-def main():
-    dream_car = Car.get()
-    # print(dream_car)
-
-
-# if __name__ == "__main__":
-#     main()
+# def main():
+#     dream_car = Car.get()
+#     print(dream_car)
 
 
 # 4. CLASS Methods
 import random
 
-# class BigBang:
-#     def __init__(self):
-#         self.planets = ["Venus", "Saturn", "Mars", "Earth", "Pluto", "Mercury", "Jupiter", "Uranus", "Neptune"]
 
-#     def create_planet(self):
-#         new_planet = random.choice(self.planets)
-#         return new_planet
+class BigBang:
+    def __init__(self):
+        self.planets = [
+            "Venus",
+            "Saturn",
+            "Mars",
+            "Earth",
+            "Pluto",
+            "Mercury",
+            "Jupiter",
+            "Uranus",
+            "Neptune",
+        ]
+
+    def create_planet(self):
+        new_planet = random.choice(self.planets)
+        return new_planet
 
 
-# bang = BigBang()
-# new_planet = bang.create_planet()
+bang = BigBang()
+new_planet = bang.create_planet()
 
 # print(new_planet)
 
@@ -334,30 +341,30 @@ class WildNatureFish(Fish):
         self._waterbody = waterbody
 
 
-def main():
-    fish: Fish = Fish.get()
-    print(fish.color)
+# def main():
+#     fish: Fish = Fish.get()
+#     print(fish.color)
 
-    tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
-    print(tank_fish)
-    print(tank_fish.color, tank_fish.name)
+#     tank_fish: AquariumFish = AquariumFish(fish.name, fish.color, 55)
+#     print(tank_fish)
+#     print(tank_fish.color, tank_fish.name)
 
-    # Inheritance builtin test methods
-    print(isinstance(fish, Fish))
-    print(issubclass(AquariumFish, Fish))
+#     # Inheritance builtin test methods
+#     print(isinstance(fish, Fish))
+#     print(issubclass(AquariumFish, Fish))
 
-    # Check if class methods inherited to subclass instance
-    print(tank_fish.waterbodies)
-    tank_fish.add_waterbody("wine glass")
-    print(tank_fish.waterbodies)
+#     # Check if class methods inherited to subclass instance
+#     print(tank_fish.waterbodies)
+#     tank_fish.add_waterbody("wine glass")
+#     print(tank_fish.waterbodies)
 
-    tank_fish.remove_waterbody("wine glass")
-    print(tank_fish.waterbodies)
+#     tank_fish.remove_waterbody("wine glass")
+#     print(tank_fish.waterbodies)
 
-    tank_fish.remove_waterbody("doesn't exist")
+#     tank_fish.remove_waterbody("doesn't exist")
 
 
-# Operator overloading
+# MAGIC (dUnder) METHODS. OPERATOR OVERLOADING.
 
 
 class FishTank:
@@ -367,6 +374,9 @@ class FishTank:
     def __str__(self):
         return f"Total size is {self.size}"
 
+    def __repr__(self):
+        return f"FishTank({self.size})"
+
     def __add__(self, other):
         return self.size + other.size
 
@@ -374,21 +384,33 @@ class FishTank:
         return self.size - other.size
 
 
-# def main():
-#     molly_to_buy: int = 3
-#     molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
+def main():
+    molly_to_buy: int = 3
+    molly: AquariumFish = AquariumFish("Molly", "Black", 10 * molly_to_buy)
 
-#     guppy_to_buy: int = 5
-#     guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
+    guppy_to_buy: int = 5
+    guppy: AquariumFish = AquariumFish("Guppy", "Silver", 5 * guppy_to_buy)
 
-#     molly_tank: FishTank = FishTank(molly.min_volume_litres)
-#     guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
+    molly_tank: FishTank = FishTank(molly.min_volume_litres)
+    guppy_tank: FishTank = FishTank(guppy.min_volume_litres)
 
-#     print(molly_tank)
-#     print(guppy_tank)
+    print(molly_tank)
+    print(guppy_tank)
 
-#     general_tank: FishTank = molly_tank + guppy_tank
-#     print(general_tank)
+    general_tank: FishTank = molly_tank + guppy_tank
+    print(general_tank)
+
+    # __str__ VS __repr__
+    print(molly_tank)
+    print(str(molly_tank))
+    print(molly_tank.__str__())
+
+    print(repr(molly_tank))
+    print(molly_tank.__repr__())
+
+    # Magic methods in built-in classes
+    print(int.__add__(2, 1))
+    print(str.__len__("some test string"))
 
 
 # Class variables, Class Methods, Static Methods
