@@ -435,10 +435,72 @@ class Lion(Predator):
     pass
 
 
+# def main():
+#     lion_king = Lion("Simba")
+#     print(lion_king.is_alive)
+#     lion_king.hunt()
+
+
+# ABSTRACT CLASSES
+
+
+from abc import ABC, abstractmethod
+from datetime import datetime as dt
+
+
+class Clock(ABC):
+    @abstractmethod
+    def show_time():
+        pass
+
+    @abstractmethod
+    def set_time():
+        pass
+
+    @abstractmethod
+    def turn_on():
+        pass
+
+    @abstractmethod
+    def turn_off():
+        pass
+
+
+class WallClock(Clock):
+    def show_time(self):
+        print(f"Current time is: {dt.now().strftime('%H:%M')}")
+
+    def set_time(self):
+        print("Move the gear wheel")
+
+    def turn_on(self):
+        print("Move switcher button up")
+
+    def turn_off(self):
+        print("Move switcher button down")
+
+
+class SmartWatch(Clock):
+    def show_time(self):
+        print(f"Current time is: {dt.now().strftime('%H:%M')}")
+
+    def set_time(self):
+        print("Entering menu -> settings -> change time")
+
+    def turn_on(self):
+        print("Hold the menu button for 5 seconds")
+
+    def turn_off(self):
+        print("Hold the menu button - > navigate to 'switch off' -> press 'start' button")
+
+
 def main():
-    lion_king = Lion("Simba")
-    print(lion_king.is_alive)
-    lion_king.hunt()
+    wall_clock = WallClock()
+    wall_clock.show_time()
+
+    apple_watch = SmartWatch()
+    apple_watch.turn_on()
+    apple_watch.show_time()
 
 
 # MAGIC (dUnder) METHODS. OPERATOR OVERLOADING.
