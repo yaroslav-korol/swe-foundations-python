@@ -30,19 +30,20 @@
 
 # # 2. Version 2
 
+
 # class Car:
-#     colors: list[str] = ['black', 'silver', 'white', 'red']
+#     colors: list[str] = ["black", "silver", "white", "red"]
+
 #     def __init__(self, brand, color, model=None):
 #         if not brand:
 #             raise ValueError("Missing brand")
 
-#         if color not in self.colors:
+#         if color not in Car.colors:
 #             raise ValueError("Invalid color option")
 
 #         self.brand = brand
 #         self.color = color
 #         self.model = model
-
 
 #     def __str__(self):
 #         return f"Brand: {self.brand}. Color: {self.color}. Model: {self.model}"
@@ -51,7 +52,7 @@
 # def main():
 #     car = desirable_car()
 #     print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
-#     car.color = 'black'
+#     car.color = "black"
 #     print(f"New color of {car.brand} is {car.color} now")
 
 #     car.new_variable = "some value"
@@ -60,14 +61,14 @@
 
 
 # def desirable_car():
-#     return Car('Tesla', 'silver', 'S')
+#     return Car("Tesla", "silver", "S")
 
 
 # if __name__ == "__main__":
 #     main()
 #     print(Car)
-#     print(Car('Tesla', 'silver'))
-#     print(Car('Reno', 'red'))
+#     print(Car("Tesla", "silver"))
+#     print(Car("Reno", "red"))
 #     print(desirable_car)
 #     print(desirable_car())
 
@@ -104,7 +105,7 @@ class Car:
 
     @color.setter
     def color(self, car_color):
-        if car_color not in self.colors:
+        if car_color not in Car.colors:
             raise ValueError("Invalid color option")
         self.____color = car_color
 
@@ -149,10 +150,12 @@ def desirable_car():
     return Car("Tesla", "silver", "S")
 
 
-#     print('\n\n')
+# if __name__ == "__main__":
+#     main()
+#     print("\n\n")
 #     print(Car)
-#     print(Car('Tesla', 'white'))
-#     print(Car('Reno', 'red'))
+#     print(Car("Tesla", "white"))
+#     print(Car("Reno", "red"))
 #     print(desirable_car)
 #     print(desirable_car())
 
@@ -189,7 +192,7 @@ class CarFull:
 
     @color.setter
     def color(self, color):
-        if color not in self.colors:
+        if color not in CarFull.colors:
             raise ValueError("This color is not available")
         self._color = color
 
