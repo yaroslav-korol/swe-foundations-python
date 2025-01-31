@@ -113,29 +113,29 @@ class Car:
         return f"Brand: {self.brand}. Color: {self.color}. Model: {self.model}"
 
 
-def main():
-    car = desirable_car()
-    print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
-    car.color = "black"
-    print(f"New color of {car.brand} is {car.color} now")
-    print()
+# def main():
+#     car = desirable_car()
+#     print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
+#     car.color = "black"
+#     print(f"New color of {car.brand} is {car.color} now")
+#     print()
 
-    # Use custom deleter function to unset color value
-    test_deleter_car = Car("BMW", "black", "700")
-    print(test_deleter_car)
-    del test_deleter_car.brand
-    print(test_deleter_car)
-    print()
+#     # Use custom deleter function to unset color value
+#     test_deleter_car = Car("BMW", "black", "700")
+#     print(test_deleter_car)
+#     del test_deleter_car.brand
+#     print(test_deleter_car)
+#     print()
 
-    # We can add any new instance variable even if it is not declared in __init__
-    car.new_variable = "some value"
-    print(car)
-    print(car.new_variable)
-    print()
+#     # We can add any new instance variable even if it is not declared in __init__
+#     car.new_variable = "some value"
+#     print(car)
+#     print(car.new_variable)
+#     print()
 
-    # # How python trust concept (conventions) works
-    car._color = "blue HA_HA_HA!"
-    print(car)
+#     # # How python trust concept (conventions) works
+#     car._color = "blue HA_HA_HA!"
+#     print(car)
 
 
 # Test setters Error raise
@@ -273,9 +273,8 @@ new_planet = BigBang.create_planet()
 
 # INHERITANCE
 
-# Superclass
 
-
+# Superclass (Parent)
 class Fish:
     waterbodies: list[str] = ["river", "lake", "pond", "canal", "aquarium"]
 
@@ -322,6 +321,7 @@ class Fish:
             print(f"There is no {waterbody} in the list")
 
 
+# Sub class (child)
 class AquariumFish(Fish):
     def __init__(self, name, color, min_volume_litres, size=None):
         super().__init__(name, color, size)
@@ -377,6 +377,68 @@ class WildNatureFish(Fish):
 #     print(tank_fish.waterbodies)
 
 #     tank_fish.remove_waterbody("doesn't exist")
+
+
+# MULTIPLE INHERITANCE
+class Swimmer:
+    def swim(self):
+        print("Swimming")
+
+
+class Runner:
+    def run(self):
+        print("Running")
+
+
+class Whale(Swimmer):
+    pass
+
+
+class Tiger(Runner):
+    pass
+
+
+class Beaver(Runner, Swimmer):
+    pass
+
+
+# def main():
+#     beaver = Beaver()
+#     beaver.run()
+#     beaver.swim()
+
+
+# MULTI LEVEL INHERITANCE
+class Animal:
+    def __init__(self, name):
+        self.name = name
+        self.is_alive = True
+
+    def eat(self):
+        print(f"{self.name} is eating")
+
+    def sleep(self):
+        print(f"{self.name} is sleeping")
+
+
+class Prey(Animal):
+    def run(self):
+        print(f"{self.name} is running away")
+
+
+class Predator(Animal):
+    def hunt(self):
+        print(f"{self.name} is hunting")
+
+
+class Lion(Predator):
+    pass
+
+
+def main():
+    lion_king = Lion("Simba")
+    print(lion_king.is_alive)
+    lion_king.hunt()
 
 
 # MAGIC (dUnder) METHODS. OPERATOR OVERLOADING.
@@ -497,6 +559,11 @@ class MyDbConnectionManager:
 
 
 # Class variables, Class Methods, Static Methods
+
+# Class variables:
+#   - shared among all instances of a class
+#   - Defined outside the constructor
+#   - Allow to share among all objects created from that class
 
 
 class StoreSoldItems:
