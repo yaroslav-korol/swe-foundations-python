@@ -615,12 +615,12 @@ class ItSpecialist:
 #   THis is "Owns-a" relationship, while ABSTRACTION has "has-a" relationship between objects
 
 
-class Cheese:
-    def __init__(self, cheese_type):
-        self.cheese_type = cheese_type
+class Sauce:
+    def __init__(self, sauce_type):
+        self.sauce_type = sauce_type
 
     def __str__(self):
-        return f"It's a {self.cheese_type} cheese"
+        return f"It's a {self.sauce_type} sauce"
 
 
 class Patty:
@@ -640,25 +640,25 @@ class Bread:
 
 
 class Burger:
-    def __init__(self, burger_type, bread_type, meat_type, cheese_type):
+    def __init__(self, burger_type, bread_type, meat_type, sauce_type):
         self.burger_type = burger_type
         self.bread = [Bread(bread_type) for _ in range(2)]
-        self.cheese = Cheese(cheese_type)
+        self.sauce = Sauce(sauce_type)
         self.patty = Patty(meat_type)
 
     def __str__(self):
         return (
             f"This {self.burger_type} consists of {len(self.bread)} {self.bread[0].bread_type}, "
-            f"with a {self.patty.meat_type} patty and {self.cheese.cheese_type} cheese inside"
+            f"with a {self.patty.meat_type} patty and {self.sauce.sauce_type} sauce inside"
         )
 
 
 def main():
     cheeseburger: Burger = Burger(
-        burger_type="cheeseburger", bread_type="bun", meat_type="beef", cheese_type="cheddar"
+        burger_type="cheeseburger", bread_type="bun", meat_type="beef", sauce_type="secret"
     )
     print(cheeseburger.bread[0])
-    print(cheeseburger.cheese)
+    print(cheeseburger.sauce)
     print(cheeseburger.patty)
     print(cheeseburger)
 
