@@ -591,23 +591,76 @@ class ItSpecialist:
         return f"{self.first_name}{self.last_name} is a {self.position}"
 
 
+# def main():
+#     company: ItCompany = ItCompany("Google")
+#     print(company)
+
+#     engineer_1: ItSpecialist = ItSpecialist(
+#         first_name="Neet", last_name="Code", position="Software Engineer"
+#     )
+#     engineer_2: ItSpecialist = ItSpecialist(
+#         first_name="Y", last_name="King", position="Senior Software Engineer"
+#     )
+
+#     company.add_employee(engineer_1)
+#     company.add_employee(engineer_2)
+#     print(company)
+
+#     for employee in company.employees:
+#         print(employee)
+
+
+# COMPOSITION
+#   The composed objects directly ! OWNS ! its components, which cannot exist independently
+#   THis is "Owns-a" relationship, while ABSTRACTION has "has-a" relationship between objects
+
+
+class Cheese:
+    def __init__(self, cheese_type):
+        self.cheese_type = cheese_type
+
+    def __str__(self):
+        return f"It's a {self.cheese_type} cheese"
+
+
+class Patty:
+    def __init__(self, meat_type):
+        self.meat_type = meat_type
+
+    def __str__(self):
+        return f"This patty is cooked from {self.meat_type} meat"
+
+
+class Bread:
+    def __init__(self, bread_type):
+        self.bread_type = bread_type
+
+    def __str__(self):
+        return f"It's a {self.bread_type}"
+
+
+class Burger:
+    def __init__(self, burger_type, bread_type, meat_type, cheese_type):
+        self.burger_type = burger_type
+        self.bread = [Bread(bread_type) for _ in range(2)]
+        self.cheese = Cheese(cheese_type)
+        self.patty = Patty(meat_type)
+
+    def __str__(self):
+        return (
+            f"This {self.burger_type} consists of {len(self.bread)} {self.bread[0].bread_type}, "
+            f"with a {self.patty.meat_type} patty and {self.cheese.cheese_type} cheese inside"
+        )
+
+
 def main():
-    company: ItCompany = ItCompany("Google")
-    print(company)
-
-    engineer_1: ItSpecialist = ItSpecialist(
-        first_name="Neet", last_name="Code", position="Software Engineer"
+    cheeseburger: Burger = Burger(
+        burger_type="cheeseburger", bread_type="bun", meat_type="beef", cheese_type="cheddar"
     )
-    engineer_2: ItSpecialist = ItSpecialist(
-        first_name="Y", last_name="King", position="Senior Software Engineer"
-    )
-
-    company.add_employee(engineer_1)
-    company.add_employee(engineer_2)
-    print(company)
-
-    for employee in company.employees:
-        print(employee)
+    print(cheeseburger.bread[0])
+    print(cheeseburger.cheese)
+    print(cheeseburger.patty)
+    print(cheeseburger)
 
 
 # SUPER() METHOD. METHODS OVERWRITING
