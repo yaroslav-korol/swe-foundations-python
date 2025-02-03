@@ -653,14 +653,55 @@ class Burger:
         )
 
 
+# def main():
+#     cheeseburger: Burger = Burger(
+#         burger_type="cheeseburger", bread_type="bun", meat_type="beef", sauce_type="secret"
+#     )
+#     print(cheeseburger.bread[0])
+#     print(cheeseburger.sauce)
+#     print(cheeseburger.patty)
+#     print(cheeseburger)
+
+
+# NESTED CLASSES
+class SuperHeroesTeam:
+    class SuperHero:
+        def __init__(self, super_name, super_power):
+            self.super_name = super_name
+            self.super_power = super_power
+
+        def __str__(self):
+            return f"This is {self.super_name} with {self.super_power} superpower"
+
+    def __init__(self, team_name):
+        self.team_name = team_name
+        self.team_members = []
+
+    def __str__(self):
+        return f"This is {self.team_name} team"
+
+    def list_heroes(self):
+        return [hero.__str__() for hero in self.team_members]
+
+    def add_superhero(self, super_name, super_power):
+        new_hero = self.SuperHero(super_name, super_power)
+        self.team_members.append(new_hero)
+
+
 def main():
-    cheeseburger: Burger = Burger(
-        burger_type="cheeseburger", bread_type="bun", meat_type="beef", sauce_type="secret"
-    )
-    print(cheeseburger.bread[0])
-    print(cheeseburger.sauce)
-    print(cheeseburger.patty)
-    print(cheeseburger)
+    avengers: SuperHeroesTeam = SuperHeroesTeam(team_name="Avengers")
+    print(avengers)
+
+    avengers.add_superhero(super_name="Iron Man", super_power="super intellect")
+    avengers.add_superhero(super_name="Thor", super_power="Thunder")
+    print(avengers.list_heroes())
+
+    # Two different ways for doing the same printing heroes
+    for avenger in avengers.team_members:
+        print(avenger)
+
+    for avenger in avengers.list_heroes():
+        print(avenger)
 
 
 # SUPER() METHOD. METHODS OVERWRITING
