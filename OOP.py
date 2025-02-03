@@ -1,3 +1,7 @@
+import random
+from abc import ABC, abstractmethod
+from datetime import datetime as dt
+
 # 1. Version 1
 
 # class Car:
@@ -216,9 +220,6 @@ class CarFull:
 
 
 # 4. CLASS Methods
-import random
-
-
 class BigBang:
     def __init__(self):
         self.planets = [
@@ -444,10 +445,6 @@ class Lion(Predator):
 # ABSTRACT CLASSES
 
 
-from abc import ABC, abstractmethod
-from datetime import datetime as dt
-
-
 class Clock(ABC):
     @abstractmethod
     def show_time():
@@ -494,13 +491,135 @@ class SmartWatch(Clock):
         print("Hold the menu button - > navigate to 'switch off' -> press 'start' button")
 
 
-def main():
-    wall_clock = WallClock()
-    wall_clock.show_time()
+# def main():
+#     wall_clock = WallClock()
+#     wall_clock.show_time()
 
-    apple_watch = SmartWatch()
-    apple_watch.turn_on()
-    apple_watch.show_time()
+#     apple_watch = SmartWatch()
+#     apple_watch.turn_on()
+#     apple_watch.show_time()
+
+
+# POLYMORPHISM (Many forms)
+
+
+# Polymorphism by inheritance
+class Vehicle(ABC):
+    @abstractmethod
+    def go(self):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+
+class ElectricCar(Vehicle):
+    def go(self):
+        return "Electric car moves"
+
+    def stop(self):
+        return "Electric car stops"
+
+
+class DieselCar(Vehicle):
+    def go(self):
+        return "Diesel car moves"
+
+    def stop(self):
+        return "Diesel car stops"
+
+
+class Tractor(DieselCar):
+    def go(self):
+        return "Tractor moves"
+
+    def stop(self):
+        return "Tractor stops"
+
+
+class Tesla(ElectricCar):
+    def go(self):
+        return "Tesla car moves"
+
+    def stop(self):
+        return "Tesla car stops"
+
+
+# Polymorphism by 'Duck typing' rule - Object must have the minimum necessary attributes / methods
+# 'If it looks like a duck and quacks like a duck - IT MUST BE A DUCK!'
+class Snail:
+    def go(self):
+        return "Snail moves"
+
+    def stop(self):
+        return "Snail stops"
+
+
+def main():
+    # vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor()]
+
+    # Assume Snail is a vehicle according to 'Duck typing' rule
+    vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor(), Snail()]
+    for vehicle in vehicles:
+        print(vehicle.go())
+
+
+# SUPER() METHOD. METHODS OVERWRITING
+
+
+class Shape:
+    def __init__(self, color, color_filled):
+        self.color = color
+        self.color_filled = color_filled
+
+    def __str__(self):
+        return f"It's {self.color} and {'filled' if self.color_filled else 'not filled'}"
+
+
+class Circle(Shape):
+    def __init__(self, color, color_filled, radius):
+        super().__init__(color, color_filled)
+        self.radius = radius
+
+    # Parent (Super) class method overwriting
+    def __str__(self):
+        print(super().__str__())
+        return f"It's area is {self.radius**2 * 3.14} cm"
+
+
+class Square(Shape):
+    def __init__(self, color, color_filled, width):
+        super().__init__(color, color_filled)
+        self.width = width
+
+    # Parent (Super) class method overwriting
+    def __str__(self):
+        print(super().__str__())
+        return f"It's area is {self.width**2} cm"
+
+
+class Triangle(Shape):
+    def __init__(self, color, color_filled, width, height):
+        super().__init__(color, color_filled)
+        self.width = width
+        self.height = height
+
+    # Parent (Super) class method overwriting
+    def __str__(self):
+        print(super().__str__())
+        return f"It's area is {self.width * self.height / 2} cm"
+
+
+# def main():
+#     circle = Circle(radius=5, color="Green", color_filled=True)
+#     print(circle)
+
+#     square = Square(width=6, color="Red", color_filled=True)
+#     print(square)
+
+#     triangle = Triangle(width=6, height=5, color="Yellow", color_filled=False)
+#     print(triangle)
 
 
 # MAGIC (dUnder) METHODS. OPERATOR OVERLOADING.
