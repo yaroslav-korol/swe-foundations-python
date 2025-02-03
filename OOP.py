@@ -556,13 +556,58 @@ class Snail:
         return "Snail stops"
 
 
-def main():
-    # vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor()]
+# def main():
+#     # vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor()]
 
-    # Assume Snail is a vehicle according to 'Duck typing' rule
-    vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor(), Snail()]
-    for vehicle in vehicles:
-        print(vehicle.go())
+#     # Assume Snail is a vehicle according to 'Duck typing' rule
+#     vehicles = [ElectricCar(), Tesla(), DieselCar(), Tractor(), Snail()]
+#     for vehicle in vehicles:
+#         print(vehicle.go())
+
+
+# AGGREGATION
+#   Aggregation - Represents a relationship where one object (the whole) contains references to one or more INDEPENDENT objects (the parts)
+
+
+class ItCompany:
+    def __init__(self, name):
+        self.name = name
+        self.employees = []
+
+    def add_employee(self, employee):
+        self.employees.append(employee)
+
+    def __str__(self):
+        return f"{self.name} has {len(self.employees)} employees"
+
+
+class ItSpecialist:
+    def __init__(self, first_name, last_name, position):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.position = position
+
+    def __str__(self):
+        return f"{self.first_name}{self.last_name} is a {self.position}"
+
+
+def main():
+    company: ItCompany = ItCompany("Google")
+    print(company)
+
+    engineer_1: ItSpecialist = ItSpecialist(
+        first_name="Neet", last_name="Code", position="Software Engineer"
+    )
+    engineer_2: ItSpecialist = ItSpecialist(
+        first_name="Y", last_name="King", position="Senior Software Engineer"
+    )
+
+    company.add_employee(engineer_1)
+    company.add_employee(engineer_2)
+    print(company)
+
+    for employee in company.employees:
+        print(employee)
 
 
 # SUPER() METHOD. METHODS OVERWRITING
