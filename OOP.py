@@ -784,6 +784,16 @@ class FishTank:
             return self.size - other.size
         raise TypeError("Invalid type")
 
+    # def __contains__(self, keyword):
+    #     # return keyword in self.some_string or list or any iterable
+
+    # Get attribute value by key. Like in dict
+    def __getitem__(self, key):
+        if key == "size":
+            return self.size
+        else:
+            return f"Key '{key}' was not found"
+
 
 # def main():
 #     molly_to_buy: int = 3
@@ -798,6 +808,9 @@ class FishTank:
 #     print(molly_tank)
 #     print(guppy_tank)
 #     print()
+
+#     # Get item like in dict
+#     print(moly_tank['size'])
 
 #     general_tank: FishTank = molly_tank + guppy_tank
 #     print(general_tank)
@@ -935,7 +948,7 @@ class StoreSoldItems:
 #     print(phone.get_price_uah())
 #     print(StoreSoldItems.get_price_uah(phone))
 
-#     # Use classmethod to update class variable
+#     # Use classmethod to update class variable. No need to create instance
 #     print(phone)
 #     StoreSoldItems.update_rate(45.00)
 #     print(phone)
@@ -945,7 +958,7 @@ class StoreSoldItems:
 #     toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
 #     print(toaster)
 
-#     # Use staticmethod to get current rate
+#     # Use staticmethod to get current rate. No need to create instance
 #     new_rate = StoreSoldItems.get_uah_rate()
 #     StoreSoldItems.update_rate(new_rate)
 #     print(phone)
