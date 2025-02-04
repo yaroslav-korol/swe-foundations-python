@@ -117,6 +117,10 @@ class Car:
         return f"Brand: {self.brand}. Color: {self.color}. Model: {self.model}"
 
 
+def desirable_car():
+    return Car("Tesla", "silver", "S")
+
+
 # def main():
 #     car = desirable_car()
 #     print(f"I want to get {car.brand} car, model {car.model} in a {car.color} color")
@@ -142,26 +146,75 @@ class Car:
 #     print(car)
 
 
-# Test setters Error raise
-# car_2 = Car("Opel", "blue", "Omega")
-# print(car_2)
+#     # Test setters Error raise
+#     car_2 = Car("Opel", "blue", "Omega")
+#     print(car_2)
 
-# car_3 = Car("", "black", "911")
-# print(car_3)
+#     car_3 = Car("", "black", "911")
+#     print(car_3)
 
-
-def desirable_car():
-    return Car("Tesla", "silver", "S")
-
-
-# if __name__ == "__main__":
-#     main()
 #     print("\n\n")
 #     print(Car)
 #     print(Car("Tesla", "white"))
 #     print(Car("Reno", "red"))
 #     print(desirable_car)
 #     print(desirable_car())
+
+
+# PUBLIC, PRIVATE AND PROTECTED VARIABLES. NAME MANGLING
+
+
+class VariableTypes:
+    def __init__(self, public_variable, private_variable, protected_variable):
+        self.public = public_variable
+        self._private_by_convention = private_variable
+        self.__protected = protected_variable
+
+    @property
+    def private_by_convention(self):
+        return f"It's a private by convention '{self._private_by_convention}' variable. Please do not touch it"
+
+    @private_by_convention.setter
+    def private_by_convention(self, private_variable):
+        print(f"Entering 'private_by_convention' setter with {private_variable} value")
+        self._private_by_convention = private_variable
+
+
+# def main():
+#     test = VariableTypes(
+#         public_variable="public", private_variable="do_not_touch", protected_variable="dunder"
+#     )
+#     # We have and may want access directly to public variables
+#     print(test.public)
+#     test.public = "PUBLIC_MODIFIED_DIRECTLY"
+#     print(test.public, end="\n\n")
+
+#     # We CAN BUT SHOULD NOT access and modify private (by convention) variables DIRECTLY
+#     print(test._private_by_convention)
+#     test._private_by_convention = "MODIFIED_DIRECTLY"
+#     print(test._private_by_convention, end="\n\n")
+
+#     # We SHOULD to write and use getters / setters for accessing or modifying private variables
+#     print(test.private_by_convention)
+#     test.private_by_convention = "MODIFIED_BY_SETTER"
+#     print(test.private_by_convention)
+
+#     # We CAN NOT access to protected variables directly because of NAME MANGLING
+#     try:
+#         print(test.__protected)
+#     except AttributeError as ae:
+#         print(ae)
+
+#     # We can access private var using the MANGLED name. BUT WE SHOULD NOT DO THAT outside the class itself!  NEVER !
+#     print(test._VariableTypes__protected)
+#     test._VariableTypes__protected = "NEVER MODIFY PROTECTED VAR"
+#     print(test._VariableTypes__protected)
+
+#     # We will have 2 DIFFERENT VARs if we try to modify private var in a traditional way. Because of NAME MANGLING
+#     test.__protected = "trying to modify protected var"
+#     print(test.__protected)
+#     print(test.__dict__)
+#     print(dir(test))
 
 
 # 3.1 Encapsulating all related functionality
@@ -688,20 +741,20 @@ class SuperHeroesTeam:
         self.team_members.append(new_hero)
 
 
-def main():
-    avengers: SuperHeroesTeam = SuperHeroesTeam(team_name="Avengers")
-    print(avengers)
+# def main():
+#     avengers: SuperHeroesTeam = SuperHeroesTeam(team_name="Avengers")
+#     print(avengers)
 
-    avengers.add_superhero(super_name="Iron Man", super_power="super intellect")
-    avengers.add_superhero(super_name="Thor", super_power="Thunder")
-    print(avengers.list_heroes())
+#     avengers.add_superhero(super_name="Iron Man", super_power="super intellect")
+#     avengers.add_superhero(super_name="Thor", super_power="Thunder")
+#     print(avengers.list_heroes())
 
-    # Two different ways for doing the same printing heroes
-    for avenger in avengers.team_members:
-        print(avenger)
+#     # Two different ways for doing the same printing heroes
+#     for avenger in avengers.team_members:
+#         print(avenger)
 
-    for avenger in avengers.list_heroes():
-        print(avenger)
+#     for avenger in avengers.list_heroes():
+#         print(avenger)
 
 
 # SUPER() METHOD. METHODS OVERWRITING
