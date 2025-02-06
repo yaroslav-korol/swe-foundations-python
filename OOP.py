@@ -163,56 +163,68 @@ def desirable_car():
 
 # PUBLIC, PRIVATE AND PROTECTED VARIABLES. NAME MANGLING
 
+# - Public (no underscore): Accessible everywhere - Protected (single underscore `_` ): Should only be accessed
+# within class and subclasses - Private (double underscore `__` ): Should only be accessed within the defining class
+
+# Remember though, Python follows the we're all consenting adults philosophy - these are conventions rather than strict
+# rules. Private/protected attributes can still be accessed, but doing so is strongly discouraged.
+
+
+# PRIVATE:
+#   Private attributes are denoted by double underscores (__)
+#   They should be accessed only through public methods
+#   They're ideal for sensitive information e.g passwords
+
 
 class VariableTypes:
-    def __init__(self, public_variable, private_variable, protected_variable):
+    def __init__(self, public_variable, protected_variable, private_variable):
         self.public = public_variable
-        self._private_by_convention = private_variable
-        self.__protected = protected_variable
+        self._protected_by_convention = protected_variable
+        self.__private = private_variable
 
     @property
-    def private_by_convention(self):
-        return f"It's a private by convention '{self._private_by_convention}' variable. Please do not touch it"
+    def protected_by_convention(self):
+        return f"It's a protected by convention '{self._protected_by_convention}' variable. Please do not touch it"
 
-    @private_by_convention.setter
-    def private_by_convention(self, private_variable):
-        print(f"Entering 'private_by_convention' setter with {private_variable} value")
-        self._private_by_convention = private_variable
+    @protected_by_convention.setter
+    def protected_by_convention(self, protected_variable):
+        print(f"Entering 'protected_by_convention' setter with {protected_variable} value")
+        self._protected_by_convention = protected_variable
 
 
 # def main():
 #     test = VariableTypes(
-#         public_variable="public", private_variable="do_not_touch", protected_variable="dunder"
+#         public_variable="public", protected_variable="do_not_touch", private_variable="dunder"
 #     )
 #     # We have and may want access directly to public variables
 #     print(test.public)
 #     test.public = "PUBLIC_MODIFIED_DIRECTLY"
 #     print(test.public, end="\n\n")
 
-#     # We CAN BUT SHOULD NOT access and modify private (by convention) variables DIRECTLY
-#     print(test._private_by_convention)
-#     test._private_by_convention = "MODIFIED_DIRECTLY"
-#     print(test._private_by_convention, end="\n\n")
+#     # We CAN BUT SHOULD NOT access and modify protected (by convention) variables DIRECTLY
+#     print(test._protected_by_convention)
+#     test._protected_by_convention = "MODIFIED_DIRECTLY"
+#     print(test._protected_by_convention, end="\n\n")
 
-#     # We SHOULD to write and use getters / setters for accessing or modifying private variables
-#     print(test.private_by_convention)
-#     test.private_by_convention = "MODIFIED_BY_SETTER"
-#     print(test.private_by_convention)
+#     # We SHOULD to write and use getters / setters for accessing or modifying protected variables
+#     print(test.protected_by_convention)
+#     test.protected_by_convention = "MODIFIED_BY_SETTER"
+#     print(test.protected_by_convention)
 
-#     # We CAN NOT access to protected variables directly because of NAME MANGLING
+#     # We CAN NOT access to private variables directly because of NAME MANGLING
 #     try:
-#         print(test.__protected)
+#         print(test.__private)
 #     except AttributeError as ae:
 #         print(ae)
 
 #     # We can access private var using the MANGLED name. BUT WE SHOULD NOT DO THAT outside the class itself!  NEVER !
-#     print(test._VariableTypes__protected)
-#     test._VariableTypes__protected = "NEVER MODIFY PROTECTED VAR"
-#     print(test._VariableTypes__protected)
+#     print(test._VariableTypes__private)
+#     test._VariableTypes__private = "NEVER MODIFY PRIVATE VAR"
+#     print(test._VariableTypes__private)
 
 #     # We will have 2 DIFFERENT VARs if we try to modify private var in a traditional way. Because of NAME MANGLING
-#     test.__protected = "trying to modify protected var"
-#     print(test.__protected)
+#     test.__private = "trying to modify private var"
+#     print(test.__private)
 #     print(test.__dict__)
 #     print(dir(test))
 
