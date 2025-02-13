@@ -425,3 +425,305 @@ class DatabaseLogger(Logger):
 
 # db_logger = DatabaseLogger()
 # db_logger.log_message("This is a test message to database")
+
+
+#  III. LISKOV SUBSTITUTION PRINCIPLE (LSP)
+
+#   Definition: Objects of a derived (child- sub-) class should be substitutable for objects of their
+#   base (super- parent-) class without altering any of the desirable properties of that program.
+
+#   Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
+#   In other words, subclasses should enhance, not weaken, the functionality of the base class,
+#   ensuring that derived classes uphold the promises made by the base class.
+
+#   Rationale:  If subtypes are not substitutable for their base types, it can lead to unexpected behavior
+#   and break code that relies on the base type.  This principle ensures that inheritance is used correctly.
+
+
+# EXAMPLES
+
+# 1. Bird Behavior
+
+
+# Violated version
+class Bird:
+    def fly(self):
+        print("Flying in the sky!")
+
+
+class Sparrow(Bird):
+    pass  # Sparrow can fly, so it works fine
+
+
+class Penguin(Bird):
+    def fly(self):
+        raise Exception("Penguins cannot fly!")  # Violates LSP
+
+
+# Usage
+def make_bird_fly(bird: Bird):
+    bird.fly()
+
+
+# sparrow = Sparrow()
+# penguin = Penguin()
+
+# make_bird_fly(sparrow)  # Works fine
+# make_bird_fly(penguin)  # Throws an exception, violating LSP
+
+
+# Refactored version
+
+
+class FlyingBird(ABC):
+    @abstractmethod
+    def fly(self):
+        pass
+
+
+class SwimmingBird(ABC):
+    @abstractmethod
+    def swim(self):
+        pass
+
+
+class Hawk(FlyingBird):
+    def fly(self):
+        print("Flying in the sky!")
+
+
+class ChillyWillyPenguin(SwimmingBird):
+    def swim(self):
+        print("Swimming in the lake!")
+
+
+# Usage
+def let_bird_fly(bird: FlyingBird):
+    bird.fly()
+
+
+def let_bird_swim(bird: SwimmingBird):
+    bird.swim()
+
+
+# hawk: Hawk = Hawk()
+# chilly_willy_penguin: ChillyWillyPenguin = ChillyWillyPenguin()
+
+# let_bird_fly(hawk)
+# let_bird_swim(chilly_willy_penguin)
+
+
+# Easily extendable:
+class Duck(FlyingBird, SwimmingBird):
+    def fly(self):
+        print("Flying in the sky!")
+
+    def swim(self):
+        print("Swimming in the lake!")
+
+
+# donald_duck: Duck = Duck()
+
+# let_bird_fly(donald_duck)
+# let_bird_swim(donald_duck)
+
+
+# 2. Rectangle and Square
+
+
+# Violated version
+class DefaultRectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def set_width(self, width):
+        self.width = width
+
+    def set_height(self, height):
+        self.height = height
+
+    def get_area(self):
+        return self.width * self.height
+
+
+class DefaultSquare(DefaultRectangle):
+    def set_width(self, width):
+        self.width = width
+        self.height = width  # Forces height to be the same, breaking expected behavior
+
+    def set_height(self, height):
+        self.width = height
+        self.height = height  # Forces width to be the same, breaking expected behavior
+
+
+# Usage
+def print_area(rectangle: DefaultRectangle):
+    rectangle.set_width(5)
+    rectangle.set_height(10)
+    print(f"Area: {rectangle.get_area()}")
+
+
+# rect = DefaultRectangle(2, 3)
+# square = DefaultSquare(4, 4)
+
+# print_area(rect)  # Expected output: Area: 50
+# print_area(square)  # Unexpected output, violates LSP
+
+
+# Refactored version
+class DefaultShape(ABC):
+    @abstractmethod
+    def get_area(self):
+        pass
+
+
+class RefactoredRectangle(DefaultShape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def set_width(self, width):
+        self.width = width
+
+    def set_height(self, height):
+        self.height = height
+
+    def get_area(self):
+        return self.width * self.height
+
+
+class RefactoredSquare(DefaultShape):
+    def __init__(self, width):
+        self.width = width
+
+    def set_width(self, width):
+        self.width = width
+
+    def get_area(self):
+        return self.width * self.width
+
+
+# Usage
+def print_shape_area(rectangle: DefaultShape):
+    print(f"Area: {rectangle.get_area()}")
+
+
+# refactored_rectangle: RefactoredRectangle = RefactoredRectangle(height=2, width=3)
+# refactored_square = RefactoredSquare(width=4)
+
+# print_shape_area(refactored_rectangle)
+# print_shape_area(refactored_square)
+
+# refactored_rectangle.set_height(5)
+# refactored_rectangle.set_width(10)
+# refactored_square.set_width(10)
+
+# print_shape_area(refactored_rectangle)
+# print_shape_area(refactored_square)
+
+
+# 3. Payment System
+
+
+# Violated version
+class PaymentProcessor:
+    def process_payment(self, amount):
+        print(f"Processing payment of ${amount}")
+
+    def refund_payment(self, amount):
+        print(f"Refunding payment of ${amount}")
+
+
+class DefaultCreditCardPayment(PaymentProcessor):
+    pass  # Supports both payments and refunds
+
+
+class CryptoPaymentProcessor(PaymentProcessor):
+    def refund_payment(self, amount):
+        raise Exception("Refunds not supported for crypto payments!")  # Violates LSP
+
+
+# Usage
+def process_and_refund(processor: PaymentProcessor, amount):
+    processor.process_payment(amount)
+    processor.refund_payment(amount)
+
+
+# credit_card = DefaultCreditCardPayment()
+# crypto = CryptoPaymentProcessor()
+
+# process_and_refund(credit_card, 100)  # Works fine
+# process_and_refund(crypto, 200)  # Throws exception, violating LSP
+
+
+# Refactored version
+class PaymentProcessor(ABC):
+    @abstractmethod
+    def process_payment(self, amount: float):
+        pass
+
+
+class RefundProcessor(ABC):
+    @abstractmethod
+    def refund_payment(self, amount: float):
+        pass
+
+
+class ChargeBackProcessor(ABC):
+    @abstractmethod
+    def open_chargeback(self, amount: float):
+        pass
+
+
+class RefactoredCreditCardPayment(PaymentProcessor, RefundProcessor, ChargeBackProcessor):
+    def process_payment(self, amount: float) -> None:
+        print(f"Processing card payment of ${amount}")
+
+    def refund_payment(self, amount: float) -> None:
+        print(f"Refunding card payment of ${amount}")
+
+    def open_chargeback(self, amount: float) -> None:
+        print(f"Open dispute on card payment of ${amount}")
+
+
+class RefactoredCryptoPayment(PaymentProcessor):
+    def process_payment(self, amount: float) -> None:
+        print(f"Processing crypto payment of ${amount}")
+
+
+# Usage
+def process_transaction(processor: PaymentProcessor, amount: float) -> None:
+    processor.process_payment(amount)
+
+
+def refund_transaction(processor: RefundProcessor, amount: float) -> None:
+    processor.refund_payment(amount)
+
+
+def dispute_transaction(processor: ChargeBackProcessor, amount) -> None:
+    processor.open_chargeback(amount)
+
+
+credit_card_payment: RefactoredCreditCardPayment = RefactoredCreditCardPayment()
+crypto_payment: RefactoredCryptoPayment = RefactoredCryptoPayment()
+
+process_transaction(credit_card_payment, 100)
+refund_transaction(credit_card_payment, 25)
+dispute_transaction(credit_card_payment, 25)
+
+process_transaction(crypto_payment, 200)
+
+
+# Easy extend
+class RefactoredPayPalPayment(PaymentProcessor, RefundProcessor):
+    def process_payment(self, amount: float) -> None:
+        print(f"Processing PayPal payment of ${amount}")
+
+    def refund_payment(self, amount: float) -> None:
+        print(f"Refunding PayPal payment of ${amount}")
+
+
+paypal_payment: RefactoredPayPalPayment = RefactoredPayPalPayment()
+process_transaction(paypal_payment, 321)
+refund_transaction(paypal_payment, 123)
