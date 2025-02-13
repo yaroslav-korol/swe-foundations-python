@@ -1,5 +1,5 @@
 # Python examples on the following topics:
 - Data Structures
-- Algorythms
+- Algorithms
 - SOLID Principles
-- 
+- OOP
