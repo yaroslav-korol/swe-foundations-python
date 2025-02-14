@@ -705,14 +705,14 @@ def dispute_transaction(processor: ChargeBackProcessor, amount) -> None:
     processor.open_chargeback(amount)
 
 
-credit_card_payment: RefactoredCreditCardPayment = RefactoredCreditCardPayment()
-crypto_payment: RefactoredCryptoPayment = RefactoredCryptoPayment()
+# credit_card_payment: RefactoredCreditCardPayment = RefactoredCreditCardPayment()
+# crypto_payment: RefactoredCryptoPayment = RefactoredCryptoPayment()
 
-process_transaction(credit_card_payment, 100)
-refund_transaction(credit_card_payment, 25)
-dispute_transaction(credit_card_payment, 25)
+# process_transaction(credit_card_payment, 100)
+# refund_transaction(credit_card_payment, 25)
+# dispute_transaction(credit_card_payment, 25)
 
-process_transaction(crypto_payment, 200)
+# process_transaction(crypto_payment, 200)
 
 
 # Easy extend
@@ -724,6 +724,318 @@ class RefactoredPayPalPayment(PaymentProcessor, RefundProcessor):
         print(f"Refunding PayPal payment of ${amount}")
 
 
-paypal_payment: RefactoredPayPalPayment = RefactoredPayPalPayment()
-process_transaction(paypal_payment, 321)
-refund_transaction(paypal_payment, 123)
+# paypal_payment: RefactoredPayPalPayment = RefactoredPayPalPayment()
+# process_transaction(paypal_payment, 321)
+# refund_transaction(paypal_payment, 123)
+
+
+# IV. Interface Segregation Principle (ISP)
+
+#   Definition: Clients should not be forced to depend on interfaces that they do not use.
+#   Instead, many specific interfaces are better than one general interface.
+
+#   Rationale:  Large, "fat" interfaces can lead to classes implementing methods they don't need, creating unnecessary dependencies and coupling.
+#   ISP promotes creating smaller, more focused interfaces that clients can use selectively.
+
+#   This principle advocates for creating specific interfaces
+#   tailored to client needs rather than a one-size-fits-all interface, thereby reducing the impact of changes and promoting decoupling.
+
+# Possible solutions: 1)use separate interfaces; 2)hierarchy of interfaces
+
+
+# EXAMPLES
+
+# 1. Printer
+
+
+# Violated version
+class MultifunctionPrinter:
+    def print_document(self, document):
+        pass
+
+    def scan_document(self, document):
+        pass
+
+    def fax_document(self, document):
+        pass
+
+
+class BasicPrinter(MultifunctionPrinter):
+    def print_document(self, document):
+        print(f"Printing: {document}")
+
+    def scan_document(self, document):
+        raise Exception("Scanning not supported!")  # ISP violation
+
+    def fax_document(self, document):
+        raise Exception("Faxing not supported!")  # ISP violation
+
+
+# Usage
+def use_printer(printer: MultifunctionPrinter):
+    printer.print_document("Report.pdf")
+    printer.scan_document("Report.pdf")  # Will throw an exception if BasicPrinter is passed
+    printer.fax_document("Report.pdf")  # Will throw an exception if BasicPrinter is passed
+
+
+# basic_printer = BasicPrinter()
+# use_printer(basic_printer)  # ❌ Breaks ISP - BasicPrinter cannot scan or fax
+
+
+# Refactored Version
+class Printer(ABC):
+    @abstractmethod
+    def print_document(self, document) -> None:
+        pass
+
+
+class Scanner(ABC):
+    @abstractmethod
+    def scan_document(self, document) -> None:
+        pass
+
+
+class Fax(ABC):
+    @abstractmethod
+    def fax_document(self, document) -> None:
+        pass
+
+
+class MultifunctionProduct(Printer, Scanner, Fax):
+    def print_document(self, document) -> None:
+        print(f"Printing: {document}")
+
+    def scan_document(self, document) -> None:
+        print(f"Scanning: {document}")
+
+    def fax_document(self, document) -> None:
+        print(f"Faxing: {document}")
+
+
+# Usage
+def print_copy(printer: Printer, doc) -> None:
+    printer.print_document(doc)
+
+
+def scan_copy(scanner: Scanner, doc) -> None:
+    scanner.scan_document(doc)
+
+
+def send_fax(fax: Fax, doc) -> None:
+    fax.fax_document(doc)
+
+
+# hp_printer: MultifunctionProduct = MultifunctionProduct()
+# print_copy(hp_printer, "Report.pdf")
+# hp_printer.print_document("Report.pdf")
+# hp_printer.scan_document("Report.pdf")
+# hp_printer.fax_document("Report.pdf")
+
+
+# Easy extend
+class PrinterWithScanner(Printer, Scanner):
+    def print_document(self, document) -> None:
+        print(f"Printing: {document}")
+
+    def scan_document(self, document) -> None:
+        print(f"Scanning: {document}")
+
+
+# canon_printer_scanner: PrinterWithScanner = PrinterWithScanner()
+
+# canon_printer_scanner.print_document("doc.txt")
+# canon_printer_scanner.scan_document("doc.txt")
+# print_copy(canon_printer_scanner, "doc.txt")
+# scan_copy(canon_printer_scanner, "doc.txt")
+
+
+# 2. Worker Example
+
+
+# Violated version
+class Worker:
+    def work(self):
+        pass
+
+    def eat(self):
+        pass
+
+
+class Robot(Worker):
+    def work(self):
+        print("Robot working.")
+
+    def eat(self):
+        raise Exception("Robots don't eat!")  # ISP violation
+
+
+# Usage
+def break_time(worker: Worker):
+    worker.eat()  # Will break if Robot is passed
+
+
+# robot_worker = Robot()
+# break_time(robot_worker)  # ❌ Breaks ISP - Robots don't eat
+
+
+# Refactored version
+class BaseWorker(ABC):
+    @abstractmethod
+    def start_work(self):
+        pass
+
+    @abstractmethod
+    def stop_work(self):
+        pass
+
+
+class HumanBeing(ABC):
+    @abstractmethod
+    def eat(self):
+        pass
+
+
+class RobotWorker(BaseWorker):
+    def start_work(self):
+        print("Robot working.")
+
+    def stop_work(self):
+        print("Robot taking break from work.")
+
+
+class HumanWorker(BaseWorker, HumanBeing):
+    def start_work(self):
+        print("Human working.")
+
+    def stop_work(self):
+        print("Human taking break from work.")
+
+    def eat(self):
+        print("Human eating!")
+
+
+# Usage
+def break_work(worker: BaseWorker):
+    worker.stop_work()
+
+
+robot_worker: RobotWorker = RobotWorker()
+human_worker: HumanWorker = HumanWorker()
+
+break_work(robot_worker)
+break_work(human_worker)
+
+
+# 3. Vehicle Example
+
+
+# Violated version
+class Vehicle:
+    def refuel(self):
+        pass
+
+    def charge_battery(self):
+        pass
+
+
+class PetrolCar(Vehicle):
+    def refuel(self):
+        print("Refueling petrol car.")
+
+    def charge_battery(self):
+        raise Exception("Petrol cars don't have batteries to charge!")  # ISP violation
+
+
+class ElectricCar(Vehicle):
+    def charge_battery(self):
+        print("Charging electric car.")
+
+    def refuel(self):
+        raise Exception("Electric cars don’t use fuel!")  # ISP violation
+
+
+# Usage
+def refill(vehicle: Vehicle):
+    vehicle.refuel()  # Will break if an ElectricCar is passed
+
+
+def recharge(vehicle: Vehicle):
+    vehicle.charge_battery()  # Will break if a PetrolCar is passed
+
+
+# tesla = ElectricCar()
+# bmw = PetrolCar()
+
+# refill(tesla)  # ❌ Breaks ISP - Electric cars don’t use fuel
+# recharge(bmw)  # ❌ Breaks ISP - Petrol cars don’t have a battery to charge
+
+
+# Refactored version
+class BaseVehicle(ABC):
+    @abstractmethod
+    def move(self):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+
+class Refuelable(ABC):
+    @abstractmethod
+    def refuel(self):
+        pass
+
+
+class Rechargeable(ABC):
+    @abstractmethod
+    def charge_battery(self):
+        pass
+
+
+class OrdinaryCar(BaseVehicle, Refuelable):
+    def move(self):
+        print("Patrol car moving")
+
+    def stop(self):
+        print("Patrol car not moving")
+
+    def refuel(self):
+        print("Refueling petrol car.")
+
+
+class ElectricalCar(BaseVehicle, Rechargeable):
+    def move(self):
+        print("Electric car moving")
+
+    def stop(self):
+        print("Electric car not moving")
+
+    def charge_battery(self):
+        print("Charging electric car.")
+
+
+# Usage
+def refill_car(vehicle: Refuelable):
+    vehicle.refuel()
+
+
+def recharge_car(vehicle: Rechargeable):
+    vehicle.charge_battery()
+
+
+tesla_car: ElectricalCar = ElectricalCar()
+bmw_car: OrdinaryCar = OrdinaryCar()
+
+refill(bmw_car)
+recharge(tesla_car)
+
+
+# Easy extend
+def drive_car(car: BaseVehicle):
+    car.move()
+    car.stop()
+
+
+drive_car(tesla_car)
+drive_car(bmw_car)
