@@ -919,11 +919,11 @@ def break_work(worker: BaseWorker):
     worker.stop_work()
 
 
-robot_worker: RobotWorker = RobotWorker()
-human_worker: HumanWorker = HumanWorker()
+# robot_worker: RobotWorker = RobotWorker()
+# human_worker: HumanWorker = HumanWorker()
 
-break_work(robot_worker)
-break_work(human_worker)
+# break_work(robot_worker)
+# break_work(human_worker)
 
 
 # 3. Vehicle Example
@@ -1024,11 +1024,11 @@ def recharge_car(vehicle: Rechargeable):
     vehicle.charge_battery()
 
 
-tesla_car: ElectricalCar = ElectricalCar()
-bmw_car: OrdinaryCar = OrdinaryCar()
+# tesla_car: ElectricalCar = ElectricalCar()
+# bmw_car: OrdinaryCar = OrdinaryCar()
 
-refill(bmw_car)
-recharge(tesla_car)
+# refill(bmw_car)
+# recharge(tesla_car)
 
 
 # Easy extend
@@ -1037,5 +1037,215 @@ def drive_car(car: BaseVehicle):
     car.stop()
 
 
-drive_car(tesla_car)
-drive_car(bmw_car)
+# drive_car(tesla_car)
+# drive_car(bmw_car)
+
+
+# V. DEPENDENCY INVERSION PRINCIPLE (DIP)
+
+#   Definition: High-level modules should not depend on low-level modules. Both should depend on abstractions.
+#   Additionally, abstractions should not depend on details; details should depend on abstractions.
+
+#   Rationale:  DIP decouples high-level modules from low-level modules by introducing abstractions.
+#   This makes the system more flexible, reusable, and easier to test.
+#   Changes to low-level modules are less likely to impact high-level modules.
+#   This principle encourages the decoupling of software modules by introducing abstract layers between high-level and low-level modules.
+
+
+# Examples
+
+
+# 1. Payment Processing
+# Violated version
+class PayPalPaymentProcessor:
+    def process_payment(self, amount: float):
+        print(f"Processing ${amount} payment through PayPal.")
+
+
+class OnlineStore:
+    def __init__(self):
+        self.payment_processor = PayPalPaymentProcessor()  # ❌ Violates DIP
+
+    def checkout(self, amount: float):
+        self.payment_processor.process_payment(amount)
+
+
+# Usage
+# store = OnlineStore()
+# store.checkout(100.0)  # ❌ Hardcoded PayPal dependency
+
+
+# Refactored version
+class GatewayPaymentProcessor(ABC):
+    @abstractmethod
+    def make_payment(self, amount: float):
+        pass
+
+
+class PayPalProcessor(GatewayPaymentProcessor):
+    def make_payment(self, amount: float):
+        print(f"Processing ${amount} payment through PayPal.")
+
+
+class DigitalStore:
+    def __init__(self, payment_processor: GatewayPaymentProcessor):
+        self.payment_processor: GatewayPaymentProcessor = payment_processor
+
+    def checkout(self, amount: float):
+        self.payment_processor.make_payment(amount)
+
+
+# Usage
+# current_processor: GatewayPaymentProcessor = PayPalProcessor()
+# store = DigitalStore(current_processor)
+# store.checkout(100.0)
+
+
+# Easy extendable
+class StripeProcessor(GatewayPaymentProcessor):
+    def make_payment(self, amount: float):
+        print(f"Processing ${amount * 100} cents payment through Stripe.")
+
+
+# Usage
+# new_processor: GatewayPaymentProcessor = StripeProcessor()
+# store = DigitalStore(new_processor)
+# store.checkout(200.0)
+
+
+# 2. Notification System
+
+
+# Violated version
+class EmailNotifier:
+    def send_email(self, message: str):
+        print(f"Sending email: {message}")
+
+
+class UserService:
+    def __init__(self):
+        self.notifier = EmailNotifier()  # ❌ Violates DIP
+
+    def notify_user(self, message: str):
+        self.notifier.send_email(message)
+
+
+# Usage
+# user_service = UserService()
+# user_service.notify_user("Welcome!")  # ❌ Hardcoded email notification
+
+
+# Refactored version
+class DefaultAppNotifier(ABC):
+    @abstractmethod
+    def send_notification(self, message: str):
+        pass
+
+
+class EmailAppNotifier(DefaultAppNotifier):
+    def send_notification(self, message: str):
+        print(f"Sending email: {message}")
+
+
+class UserNotifierService:
+    def __init__(self, notifier: DefaultAppNotifier):
+        self.notifier: DefaultAppNotifier = notifier
+
+    def notify_user(self, message: str):
+        self.notifier.send_notification(message)
+
+
+# Usage
+# current_notifier: DefaultAppNotifier = EmailAppNotifier()
+# current_user_service = UserNotifierService(current_notifier)
+# current_user_service.notify_user("Welcome!")
+
+
+# Easy extendable
+class MobilePushNotifier(DefaultAppNotifier):
+    def __init__(self, user_name: str):
+        self.user_name = user_name
+
+    def send_notification(self, message: str):
+        print(f"Push notification sent to user: {self.user_name}")
+        print(f"Message: {message}")
+
+
+# Usage
+# new_notifier: MobilePushNotifier = MobilePushNotifier("Alex")
+# new_user_service: UserNotifierService = UserNotifierService(new_notifier)
+# new_user_service.notify_user(message="Hi there")
+
+
+# 3. Database Connection
+
+
+# Violated version
+class MySQLDatabase:
+    def connect(self):
+        print("Connecting to MySQL Database.")
+
+    def execute_query(self, query: str):
+        print(f"Executing query: {query}")
+
+
+class UserRepository:
+    def __init__(self):
+        self.database = MySQLDatabase()
+
+    def get_users(self):
+        self.database.connect()
+        self.database.execute_query("SELECT * FROM users")
+
+
+# Usage
+# repo = UserRepository()
+# repo.get_users()
+
+
+# Refactored version
+class SQLDatabase(ABC):
+    @abstractmethod
+    def connect(self):
+        pass
+
+    @abstractmethod
+    def execute_query(self, query: str):
+        pass
+
+
+class PostgreSQLDatabase(SQLDatabase):
+    def connect(self):
+        print("Connecting to Postgres Database.")
+
+    def execute_query(self, query: str):
+        print(f"Executing Postgres Database query: {query}")
+
+
+class LectionsRepository:
+    def __init__(self, sql_database: SQLDatabase):
+        self.sql_database: SQLDatabase = sql_database
+
+    def get_lections(self):
+        self.sql_database.connect()
+        self.sql_database.execute_query("SELECT * FROM lections")
+
+
+# Usage
+postgres_db_engine: SQLDatabase = PostgreSQLDatabase()
+postgres_db_lections_data: LectionsRepository = LectionsRepository(postgres_db_engine)
+postgres_db_lections_data.get_lections()
+
+
+# Easy extendable
+class SQLiteDatabase(SQLDatabase):
+    def connect(self):
+        print("Connecting to SQLite Database.")
+
+    def execute_query(self, query: str):
+        print(f"Executing SQLite Database query: {query}")
+
+
+sqlite_db_engine: SQLDatabase = SQLiteDatabase()
+sqlite_db_lection_data: LectionsRepository = LectionsRepository(sqlite_db_engine)
+sqlite_db_lection_data.get_lections()
