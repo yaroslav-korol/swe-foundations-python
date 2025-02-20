@@ -72,11 +72,23 @@ def selection_sort(sequence: list[int]) -> int:
 
 
 # BUBBLE SORT
-def bubble_sort():
-    pass
+def bubble_sort(sequence: list[int]) -> int:
+    sequence_len: int = len(sequence)
+    for i in range(sequence_len):
+        swapped: bool = False
+        for j in range(sequence_len - 1 - i):
+            if sequence[j] > sequence[j + 1]:
+                sequence[j], sequence[j + 1] = sequence[j + 1], sequence[j]
+                swapped = True
+
+        if not swapped:
+            return 0
+
+    return 1
 
 
 # MERGE SORT
+
 
 # QUICK SORT
 
@@ -95,12 +107,23 @@ def main():
     # print(linear_pythonic_absent)
 
     # Selection sort
-    list_for_selection_sort: list[int] = [i for i in UNORDERED_NUMS]
-    print(list_for_selection_sort)
 
-    selection_sort(list_for_selection_sort)
-    print(list_for_selection_sort)
-    print(UNORDERED_NUMS)
+    # list_for_selection_sort: list[int] = [i for i in UNORDERED_NUMS]
+    # print(list_for_selection_sort)
+
+    # selection_sort(list_for_selection_sort)
+    # print(list_for_selection_sort)
+    # print(UNORDERED_NUMS)
+
+    # Bubble sort
+
+    # list_for_bubble_sort: list[int] = [i for i in UNORDERED_NUMS]
+    # print(list_for_bubble_sort)
+
+    # bubble_sort(list_for_bubble_sort)
+    # print(bubble_sort(list_for_bubble_sort))
+    # print(list_for_bubble_sort)
+    # print(UNORDERED_NUMS)
 
 
 if __name__ == "__main__":
