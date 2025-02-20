@@ -26,60 +26,81 @@
 # • O(log n) is faster than O(n), but it gets a lot faster once the list of items you’re searching through grows.
 
 
+# CONSTANTS
+UNORDERED_NUMS: list[int] = [7, 3, 1, 11, 23, 34, 345, 123, 456, 89, 1001, 134, 567, 5656]
+TARGET_PRESENT: int = 34
+TARGET_ABSENT: int = 340
+
+
+# SEARCHING ALGORITHMS
+
+
+# LINEAR SEARCH
+
+
+# Manual implementation
+def linear_search_manual(sequence: list[int], target: int) -> bool:
+    for i in range(len(sequence)):
+        if sequence[i] == target:
+            return True
+    return False
+
+
+# Pythonic implementation
+def linear_search_pythonic(sequence: list[int], target: int) -> bool:
+    return target in sequence
+
+
 # BINARY SEARCH
 
 
-def binary_search(iter_object: list, target: any):
-    print("Enter binary search")
-    low: int = 0
-    high: int = len(iter_object) - 1
-
-    print(f"Low: {low}, High: {high}")
-
-    while low <= high:
-        middle: int = int((high + low) / 2)  # bug here
-        current_guess: any = iter_object[middle]
-
-        # debug
-        print("Debug values")
-        print(f"Middle: {middle}, Current guess: {current_guess}")
-
-        if current_guess == target:
-            return middle
-
-        if current_guess < target:
-            low = middle
-
-        if current_guess > target:
-            high = middle
-
-    return None
+# SORTING ALGORITHMS
 
 
-def selection_sort(unsorted_list: list) -> list:
-    list_len: int = len(unsorted_list) - 1
+# SELECTION SORT
+def selection_sort(sequence: list[int]) -> int:
+    sequence_len: int = len(sequence)
+    for i in range(sequence_len):
+        min_index: int = i
 
-    for i in range(list_len):
-        for j in range(i + 1, list_len + 1):
-            current_value: int = unsorted_list[j]
-            if current_value < unsorted_list[i]:
-                unsorted_list[j] = unsorted_list[i]
-                unsorted_list[i] = current_value
+        for j in range(i + 1, sequence_len):
+            if sequence[j] < sequence[min_index]:
+                min_index = j
+        sequence[min_index], sequence[i] = sequence[i], sequence[min_index]
 
-    return unsorted_list
+    return 0
+
+
+# BUBBLE SORT
+def bubble_sort():
+    pass
+
+
+# MERGE SORT
+
+# QUICK SORT
 
 
 def main():
-    unordered_nums: list[int] = [7, 3, 1, 11, 23, 34, 345, 123, 456, 89, 1001, 134, 567, 5656]
+    # Linear search
 
-    ordered_nums: list[int] = selection_sort(unordered_nums)
-    print(ordered_nums)
+    # linear_manual_present: bool = linear_search_manual(UNORDERED_NUMS, TARGET_PRESENT)
+    # linear_manual_absent: bool = linear_search_manual(UNORDERED_NUMS, TARGET_ABSENT)
+    # print(linear_manual_present)
+    # print(linear_manual_absent)
 
-    target_object = 2334
-    # target_object = 11
-    result = binary_search(ordered_nums, target_object)
+    # linear_pythonic_present: bool = linear_search_manual(UNORDERED_NUMS, TARGET_PRESENT)
+    # linear_pythonic_absent: bool = linear_search_manual(UNORDERED_NUMS, TARGET_ABSENT)
+    # print(linear_pythonic_present)
+    # print(linear_pythonic_absent)
 
-    print(result)
+    # Selection sort
+    list_for_selection_sort: list[int] = [i for i in UNORDERED_NUMS]
+    print(list_for_selection_sort)
+
+    selection_sort(list_for_selection_sort)
+    print(list_for_selection_sort)
+    print(UNORDERED_NUMS)
 
 
 if __name__ == "__main__":
