@@ -999,34 +999,34 @@ class StoreSoldItems:
         return f"{self.item_brand} {self.item_type} current price is {self.get_price_uah()} UAH"
 
 
-# def main():
-#     laptop: StoreSoldItems = StoreSoldItems("laptop", "Apple", 2500)
-#     phone: StoreSoldItems = StoreSoldItems("phone", "Samsung", 1500)
-#     print(f"Total items sold: {StoreSoldItems.sold_items}")
+def main():
+    laptop: StoreSoldItems = StoreSoldItems("laptop", "Apple", 2500)
+    phone: StoreSoldItems = StoreSoldItems("phone", "Samsung", 1500)
+    print(f"Total items sold: {StoreSoldItems.sold_items}")
 
-#     # Use cases when better to modify class variables by instance not class call
-#     print(laptop)
-#     laptop.uah_to_usd_rate = 42.5
-#     print(laptop)
+    # Use cases when better to modify class variables by instance not class call
+    print(laptop)
+    laptop.uah_to_usd_rate = 42.5
+    print(laptop)
 
-#     # We can call instance method from class by passing instance instead of self
-#     print(phone.get_price_uah())
-#     print(StoreSoldItems.get_price_uah(phone))
+    # We can call instance method from class by passing instance instead of self
+    print(phone.get_price_uah())
+    print(StoreSoldItems.get_price_uah(phone))
 
-#     # Use classmethod to update class variable. No need to create instance
-#     print(phone)
-#     StoreSoldItems.update_rate(45.00)
-#     print(phone)
+    # Use classmethod to update class variable. No need to create instance
+    print(phone)
+    StoreSoldItems.update_rate(45.00)
+    print(phone)
 
-#     # Classmethod as alternative constructor
-#     item_string: str = "toaster-gorenje-50"
-#     toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
-#     print(toaster)
+    # Classmethod as alternative constructor
+    item_string: str = "toaster-gorenje-50"
+    toaster: StoreSoldItems = StoreSoldItems.from_string(item_string)
+    print(toaster)
 
-#     # Use staticmethod to get current rate. No need to create instance
-#     new_rate = StoreSoldItems.get_uah_rate()
-#     StoreSoldItems.update_rate(new_rate)
-#     print(phone)
+    # Use staticmethod to get current rate. No need to create instance
+    new_rate = StoreSoldItems.get_uah_rate()
+    StoreSoldItems.update_rate(new_rate)
+    print(phone)
 
 
 if __name__ == "__main__":

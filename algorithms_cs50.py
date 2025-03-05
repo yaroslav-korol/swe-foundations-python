@@ -88,6 +88,29 @@ def bubble_sort(sequence: list[int]) -> int:
 
 
 # MERGE SORT
+def merge_sort(sequence: list[int], sorted_list: list = []) -> int:
+    sorted_list = sorted_list
+    sequence_len: int = len(sequence)
+    middle: int = sequence_len // 2
+    # base case
+    if sequence_len < 2:
+        return sequence
+
+    # recursive case
+    left = merge_sort(sequence[:middle], sorted_list)
+    right = merge_sort(sequence[middle:], sorted_list)
+
+    if right > left:
+        # sorted_list.append(left)
+        # sorted_list.append(right)
+        sorted_list += left
+        sorted_list += right
+
+    elif left > left:
+        # sorted_list.append(right)
+        # sorted_list.append(left)
+        sorted_list += right
+        sorted_list += left
 
 
 # QUICK SORT
@@ -124,6 +147,16 @@ def main():
     # print(bubble_sort(list_for_bubble_sort))
     # print(list_for_bubble_sort)
     # print(UNORDERED_NUMS)
+
+    # Merge sort
+
+    list_for_merge_sort: list[int] = [i for i in UNORDERED_NUMS]
+    print(list_for_merge_sort)
+
+    merge_sort(list_for_merge_sort)
+
+    print(list_for_merge_sort)
+    print(UNORDERED_NUMS)
 
 
 if __name__ == "__main__":
