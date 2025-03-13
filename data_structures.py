@@ -38,83 +38,104 @@ class MinStack:
 
 
 class ListNode:
-    def __init__(self, value):
-        self.value = value
-        self.next = None
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 
-class LinkedList:
+class MyLinkedList:
     def __init__(self):
-        self.head: ListNode = None
-        self.tail: ListNode = self.head
+        self.head = ListNode(-1)
+        self.tail = self.head
 
     def get(self, index: int) -> int:
-        current_node = self.head
-        initial_index = 0
-
-        while current_node:
-            if initial_index == index:
-                return current_node.value
-
-            current_node = current_node.next
-            initial_index += 1
-
+        i = 0
+        head = self.head.next
+        while head:
+            if i == index:
+                return head.val
+            i += 1
+            head = head.next
         return -1
 
-    def insertHead(self, val: int) -> None:
-        new_head: ListNode = ListNode(val)
-        if not self.head:
-            self.head = self.tail = new_head
-        else:
-            new_head.next = self.head
-            self.head = new_head
+    def insert_at_head(self, val: int) -> None:
+        new_node = ListNode(val, self.head.next)
+        self.head.next = new_node
+        if not new_node.next:
+            self.tail = new_node
 
-    def insertTail(self, val: int) -> None:
-        new_tail: ListNode = ListNode(val)
-        if not self.tail:
-            self.tail = new_tail
-        else:
-            self.tail.next = new_tail
-            self.tail = new_tail
+    def insert_at_tail(self, val: int) -> None:
+        self.tail.next = ListNode(val)
+        self.tail = self.tail.next
 
-    def remove(self, index: int) -> bool:
-        current_node = self.head
-        initial_index = 0
+    def insert_at_index(self, index: int, val: int) -> None:
+        i = 0
+        current = self.head
+        while current and i < index:
+            i += 1
+            current = current.next
+        current.next = ListNode(val=val, next=current.next)
 
-        while current_node:
-            previous = current_node
-            initial_index += 1
+    def delete_at_index(self, index: int) -> None:
+        i = 0
+        previous = self.head
+        while previous and i < index:
+            i += 1
+            previous = previous.next
+        # Out of bounds
+        if not previous or not previous.next:
+            return
+        # Deleting at tail index
+        if previous.next == self.tail:
+            self.tail = previous
 
-            if initial_index == index:
-                previous.next = current_node.next.next
-                return True
+        previous.next = previous.next.next
 
-        return False
+    def get_values(self) -> list[int]:
+        values: list[int] = []
+        current = self.head.next
+        while current:
+            values.append(current.val)
+            current = current.next
+        return values
 
-    def getValues(self) -> list[int]:
-        current_node = self.head
-        list_values = []
-        while current_node:
-            list_values.append(current_node.value)
-            current_node = current_node.next
-
-        return list_values
-
-
-linked_list_1: LinkedList = LinkedList()
-linked_list_1: LinkedList = LinkedList()
-
-# Debug test case
-print(linked_list_1.get(0))
-
-linked_list_1.insertHead(1)
-linked_list_1.insertTail(2)
-linked_list_1.insertHead(0)
-linked_list_1.remove(1)
-print(linked_list_1.getValues())
-
-print(linked_list_1.get(1))
-print(linked_list_1.get(3))
+    def print_list(self):
+        values = []
+        head = self.head.next
+        while head:
+            values.append(str(head.val))
+            head = head.next
+        print(" -> ".join(values))
 
 
-check_value = None
+# Explanation
+my_linked_list: MyLinkedList = MyLinkedList()
+my_linked_list.insert_at_head(1)
+my_linked_list.insert_at_tail(3)
+print(my_linked_list.get(1))
+my_linked_list.insert_at_head(2)
+print(my_linked_list.get(1))
+my_linked_list.insert_at_head(4)
+my_linked_list.insert_at_head(6)
+my_linked_list.insert_at_head(8)
+my_linked_list.insert_at_index(1, 11)
+my_linked_list.insert_at_index(3, 15)
+my_linked_list.print_list()
+
+my_linked_list.delete_at_index(1)
+my_linked_list.delete_at_index(2)
+my_linked_list.print_list()
+
+# Edge cases
+
+# Out of bounds
+my_linked_list.delete_at_index(7)
+my_linked_list.delete_at_index(6)
+
+# Index at tail
+my_linked_list.delete_at_index(5)
+my_linked_list.print_list()
+my_linked_list.insert_at_tail(3)
+my_linked_list.print_list()
+
+print(my_linked_list.get_values())
