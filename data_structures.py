@@ -37,15 +37,15 @@ class MinStack:
 # 2. Singly Linked List
 
 
-class ListNode:
+class SinglyLinkedNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
 
-class MyLinkedList:
+class SinglyLinkedList:
     def __init__(self):
-        self.head = ListNode(-1)
+        self.head = SinglyLinkedNode(-1)
         self.tail = self.head
 
     def get(self, index: int) -> int:
@@ -59,13 +59,13 @@ class MyLinkedList:
         return -1
 
     def insert_at_head(self, val: int) -> None:
-        new_node = ListNode(val, self.head.next)
+        new_node = SinglyLinkedNode(val, self.head.next)
         self.head.next = new_node
         if not new_node.next:
             self.tail = new_node
 
     def insert_at_tail(self, val: int) -> None:
-        self.tail.next = ListNode(val)
+        self.tail.next = SinglyLinkedNode(val)
         self.tail = self.tail.next
 
     def insert_at_index(self, index: int, val: int) -> None:
@@ -74,7 +74,17 @@ class MyLinkedList:
         while current and i < index:
             i += 1
             current = current.next
-        current.next = ListNode(val=val, next=current.next)
+
+        # Out of bounds check
+        if not current:
+            return
+
+        new_node = SinglyLinkedNode(val=val, next=current.next)
+        current.next = new_node
+
+        # If inserted at the end, update tail
+        if not new_node.next:
+            self.tail = new_node
 
     def delete_at_index(self, index: int) -> None:
         i = 0
@@ -108,34 +118,80 @@ class MyLinkedList:
         print(" -> ".join(values))
 
 
-# Explanation
-my_linked_list: MyLinkedList = MyLinkedList()
-my_linked_list.insert_at_head(1)
-my_linked_list.insert_at_tail(3)
-print(my_linked_list.get(1))
+# [
+#     "MyLinkedList",
+#     "addAtHead",
+#     "addAtHead",
+#     "addAtHead",
+#     "addAtIndex",
+#     "deleteAtIndex",
+#     "addAtHead",
+#     "addAtTail",
+#     "get",
+#     "addAtHead",
+#     "addAtIndex",
+#     "addAtHead",
+# ]
+# [[], [7], [2], [1], [3, 0], [2], [6], [4], [4], [4], [5, 0], [6]]
+
+
+my_linked_list: SinglyLinkedList = SinglyLinkedList()
+my_linked_list.insert_at_head(7)
 my_linked_list.insert_at_head(2)
-print(my_linked_list.get(1))
-my_linked_list.insert_at_head(4)
-my_linked_list.insert_at_head(6)
-my_linked_list.insert_at_head(8)
-my_linked_list.insert_at_index(1, 11)
-my_linked_list.insert_at_index(3, 15)
+my_linked_list.insert_at_head(1)
 my_linked_list.print_list()
 
-my_linked_list.delete_at_index(1)
+my_linked_list.insert_at_index(3, 0)
+my_linked_list.insert_at_index(15, 15)
+my_linked_list.print_list()
 my_linked_list.delete_at_index(2)
 my_linked_list.print_list()
 
-# Edge cases
-
-# Out of bounds
-my_linked_list.delete_at_index(7)
-my_linked_list.delete_at_index(6)
-
-# Index at tail
-my_linked_list.delete_at_index(5)
+my_linked_list.insert_at_head(6)
 my_linked_list.print_list()
-my_linked_list.insert_at_tail(3)
+my_linked_list.insert_at_tail(4)
+
+my_linked_list.print_list()
+print(my_linked_list.get(4))
 my_linked_list.print_list()
 
-print(my_linked_list.get_values())
+
+my_linked_list.insert_at_head(4)
+my_linked_list.insert_at_index(5, 0)
+my_linked_list.print_list()
+
+my_linked_list.insert_at_head(6)
+my_linked_list.print_list()
+
+
+# Explanation
+# my_linked_list: SinglyLinkedList = SinglyLinkedList()
+# my_linked_list.insert_at_head(1)
+# my_linked_list.insert_at_tail(3)
+# print(my_linked_list.get(1))
+# my_linked_list.insert_at_head(2)
+# print(my_linked_list.get(1))
+# my_linked_list.insert_at_head(4)
+# my_linked_list.insert_at_head(6)
+# my_linked_list.insert_at_head(8)
+# my_linked_list.insert_at_index(1, 11)
+# my_linked_list.insert_at_index(3, 15)
+# my_linked_list.print_list()
+
+# my_linked_list.delete_at_index(1)
+# my_linked_list.delete_at_index(2)
+# my_linked_list.print_list()
+
+# # Edge cases
+
+# # Out of bounds
+# my_linked_list.delete_at_index(7)
+# my_linked_list.delete_at_index(6)
+
+# # Index at tail
+# my_linked_list.delete_at_index(5)
+# my_linked_list.print_list()
+# my_linked_list.insert_at_tail(3)
+# my_linked_list.print_list()
+
+# print(my_linked_list.get_values())

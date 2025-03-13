@@ -287,62 +287,19 @@ def print_linked_list(head: list[ListNode]):
     # print_linked_list(merged_list)
 
 
-# Linked list Implementation
-class MyLinkedList:
+# Doubly Linked list Implementation
+class DoublyLinkedNode:
+    def __init__(self, value=0, next=None, previous=None):
+        self.value = value
+        self.next = next
+        self.previous = previous
+
+
+class DoublyLinkedList:
     def __init__(self):
-        self.head = ListNode(-1)
+        self.head = DoublyLinkedNode(-1)
         self.tail = self.head
-
-    def get(self, index: int) -> int:
-        i = 0
-        head = self.head.next
-        while head:
-            if i == index:
-                return head.val
-            i += 1
-            head = head.next
-        return -1
-
-    def insert_at_head(self, val: int) -> None:
-        new_node = ListNode(val, self.head.next)
-        self.head.next = new_node
-        if not new_node.next:
-            self.tail = new_node
-
-    def insert_at_tail(self, val: int) -> None:
-        self.tail.next = ListNode(val)
-        self.tail = self.tail.next
-
-    def insert_at_index(self, index: int, val: int) -> None:
-        i = 0
-        current = self.head
-        while current and i < index:
-            i += 1
-            current = current.next
-        current.next = ListNode(val=val, next=current.next)
-
-    def delete_at_index(self, index: int) -> None:
-        i = 0
-        previous = self.head
-        while previous and i < index:
-            i += 1
-            previous = previous.next
-        # Out of bounds
-        if not previous or not previous.next:
-            return
-        # Deleting at tail index
-        if previous.next == self.tail:
-            self.tail = previous
-
-        previous.next = previous.next.next
-
-    def get_values(self) -> list[int]:
-        values: list[int] = []
-        current = self.head.next
-        while current:
-            values.append(current.val)
-            current = current.next
-        return values
+        self.size = 0
 
     def print_list(self):
         values = []
@@ -354,7 +311,7 @@ class MyLinkedList:
 
 
 # Explanation
-my_linked_list: MyLinkedList = MyLinkedList()
+my_linked_list: DoublyLinkedList = DoublyLinkedList()
 my_linked_list.insert_at_head(1)
 my_linked_list.insert_at_tail(3)
 print(my_linked_list.get(1))
