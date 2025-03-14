@@ -118,69 +118,34 @@ class SinglyLinkedList:
         print(" -> ".join(values))
 
 
-# [
-#     "MyLinkedList",
-#     "addAtHead",
-#     "addAtHead",
-#     "addAtHead",
-#     "addAtIndex",
-#     "deleteAtIndex",
-#     "addAtHead",
-#     "addAtTail",
-#     "get",
-#     "addAtHead",
-#     "addAtIndex",
-#     "addAtHead",
-# ]
-# [[], [7], [2], [1], [3, 0], [2], [6], [4], [4], [4], [5, 0], [6]]
-
-
-my_linked_list: SinglyLinkedList = SinglyLinkedList()
-my_linked_list.insert_at_head(7)
-my_linked_list.insert_at_head(2)
-my_linked_list.insert_at_head(1)
-my_linked_list.print_list()
-
-my_linked_list.insert_at_index(3, 0)
-my_linked_list.insert_at_index(15, 15)
-my_linked_list.print_list()
-my_linked_list.delete_at_index(2)
-my_linked_list.print_list()
-
-my_linked_list.insert_at_head(6)
-my_linked_list.print_list()
-my_linked_list.insert_at_tail(4)
-
-my_linked_list.print_list()
-print(my_linked_list.get(4))
-my_linked_list.print_list()
-
-
-my_linked_list.insert_at_head(4)
-my_linked_list.insert_at_index(5, 0)
-my_linked_list.print_list()
-
-my_linked_list.insert_at_head(6)
-my_linked_list.print_list()
-
-
-# Explanation
 # my_linked_list: SinglyLinkedList = SinglyLinkedList()
-# my_linked_list.insert_at_head(1)
-# my_linked_list.insert_at_tail(3)
-# print(my_linked_list.get(1))
+# my_linked_list.insert_at_head(7)
 # my_linked_list.insert_at_head(2)
-# print(my_linked_list.get(1))
-# my_linked_list.insert_at_head(4)
-# my_linked_list.insert_at_head(6)
-# my_linked_list.insert_at_head(8)
-# my_linked_list.insert_at_index(1, 11)
-# my_linked_list.insert_at_index(3, 15)
+# my_linked_list.insert_at_head(1)
 # my_linked_list.print_list()
 
-# my_linked_list.delete_at_index(1)
+# my_linked_list.insert_at_index(3, 0)
+# my_linked_list.insert_at_index(15, 15)
+# my_linked_list.print_list()
 # my_linked_list.delete_at_index(2)
 # my_linked_list.print_list()
+
+# my_linked_list.insert_at_head(6)
+# my_linked_list.print_list()
+# my_linked_list.insert_at_tail(4)
+
+# my_linked_list.print_list()
+# print(my_linked_list.get(4))
+# my_linked_list.print_list()
+
+
+# my_linked_list.insert_at_head(4)
+# my_linked_list.insert_at_index(5, 0)
+# my_linked_list.print_list()
+
+# my_linked_list.insert_at_head(6)
+# my_linked_list.print_list()
+
 
 # # Edge cases
 
@@ -195,3 +160,139 @@ my_linked_list.print_list()
 # my_linked_list.print_list()
 
 # print(my_linked_list.get_values())
+
+
+# 3. Doubly Linked list Implementation
+class DoublyLinkedNode:
+    def __init__(self, value=0, next=None, previous=None):
+        self.value = value
+        self.next = next
+        self.previous = previous
+
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = DoublyLinkedNode(-99)
+        self.tail = DoublyLinkedNode(99)
+        self.head.next = self.tail
+        self.tail.previous = self.head
+        self.size = 0
+
+    def get_previous(self, index):
+        current = self.head.next
+        for _ in range(index):
+            current = current.next
+        return current
+
+    def get(self, index: int) -> int:
+        if index >= self.size:
+            return -1
+
+        current = self.get_previous(index)
+        return current.value
+
+    def insert_at_head(self, val: int) -> None:
+        head = self.head.next
+
+        new_node = DoublyLinkedNode(value=val, previous=head.previous, next=head)
+        head.previous = new_node
+        self.head.next = new_node
+
+        self.size += 1
+
+    def insert_at_tail(self, val: int) -> None:
+        tail = self.tail
+
+        new_node = DoublyLinkedNode(value=val, previous=tail.previous, next=tail)
+        tail.previous.next = new_node
+        tail.previous = new_node
+
+        self.size += 1
+
+    def insert_at_index(self, index: int, val: int) -> None:
+        if index > self.size:
+            return
+
+        if index == self.size:
+            return self.insert_at_tail(val)
+
+        current = self.get_previous(index)
+        new_node = DoublyLinkedNode(value=val, previous=current.previous, next=current)
+        current.previous.next = new_node
+        current.previous = new_node
+        self.size += 1
+        return
+
+    def delete_at_tail(self):
+        self.tail = self.tail.previous
+        self.tail.next = None
+        self.size -= 1
+        return
+
+    def delete_at_index(self, index: int) -> None:
+        if index >= self.size:
+            return
+
+        if index == self.size - 1:
+            return self.delete_at_tail()
+
+        current = self.get_previous(index)
+        current.previous.next = current.next
+        current.next.previous = current.previous
+
+        self.size -= 1
+
+    def print_list(self):
+        values = []
+        head = self.head.next
+        while head.next:
+            values.append(str(head.value))
+            head = head.next
+        print(" -> ".join(values))
+
+
+# Explanation
+my_doubly_linked_list: DoublyLinkedList = DoublyLinkedList()
+print(my_doubly_linked_list.get(0))
+
+my_doubly_linked_list.insert_at_head(9)
+my_doubly_linked_list.print_list()
+
+my_doubly_linked_list.insert_at_tail(111)
+my_doubly_linked_list.print_list()
+
+
+my_doubly_linked_list.insert_at_head(8)
+my_doubly_linked_list.insert_at_tail(112)
+my_doubly_linked_list.print_list()
+
+print(my_doubly_linked_list.get(5))
+print(my_doubly_linked_list.get(3))
+
+
+my_doubly_linked_list.insert_at_index(2, 50)
+my_doubly_linked_list.print_list()
+
+my_doubly_linked_list.insert_at_index(3, 60)
+my_doubly_linked_list.print_list()
+
+
+my_doubly_linked_list.insert_at_index(my_doubly_linked_list.size, 155)
+my_doubly_linked_list.print_list()
+
+my_doubly_linked_list.insert_at_index(0, 7)
+my_doubly_linked_list.print_list()
+
+my_doubly_linked_list.delete_at_index(12)
+my_doubly_linked_list.delete_at_index(2)
+my_doubly_linked_list.print_list()
+
+
+# Deleting edge cases
+my_doubly_linked_list.delete_at_index(0)
+my_doubly_linked_list.print_list()
+my_doubly_linked_list.delete_at_index(my_doubly_linked_list.size - 1)
+my_doubly_linked_list.print_list()
+
+my_doubly_linked_list.insert_at_tail(212)
+my_doubly_linked_list.print_list()
