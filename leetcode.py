@@ -197,38 +197,6 @@ class ListNode:
         self.next = next
 
 
-# class MergeSolution:
-#     def mergeTwoLists(self, list1: list[ListNode], list2: list[ListNode]) -> list[ListNode]:
-#         current_l1 = list1
-#         current_l2 = list2
-
-#         merged_head = ListNode()
-#         merged_tail = merged_head
-
-#         while current_l1 or current_l2:
-#             if not current_l1:
-#                 merged_tail.next = current_l2
-#                 break
-
-#             elif not current_l2:
-#                 merged_tail.next = current_l1
-#                 break
-
-#             else:
-#                 if current_l1.val < current_l2.val:
-#                     merged_tail.next = current_l1
-#                     merged_tail = merged_tail.next
-#                     current_l1 = current_l1.next
-
-#                 else:
-#                     merged_tail.next = current_l2
-#                     merged_tail = merged_tail.next
-#                     # merged_tail = current_l1
-#                     current_l2 = current_l2.next
-
-#         return merged_head.next
-
-
 class MergeSolution:
     def mergeTwoLists(self, list1: list[ListNode], list2: list[ListNode]) -> list[ListNode]:
         merged_head: ListNode = ListNode()
@@ -289,135 +257,115 @@ def print_linked_list(head: list[ListNode]):
 
 # Doubly Linked list Implementation
 class DoublyLinkedNode:
-    def __init__(self, value=0, next=None, previous=None):
+    def __init__(self, value="", next=None, previous=None):
         self.value = value
         self.next = next
         self.previous = previous
 
 
-class DoublyLinkedList:
-    def __init__(self):
-        self.head = DoublyLinkedNode(-99)
-        self.tail = DoublyLinkedNode(99)
+# Implement Browser history
+class BrowserHistory:
+    def __init__(self, homepage: str):
+        """Initializes the object with the homepage of the browser."""
+        self.head = DoublyLinkedNode(value=homepage)
+        self.tail = self.head
         self.head.next = self.tail
         self.tail.previous = self.head
-        self.size = 0
+        self.current_position = self.head
+        self.current_index = 0
+        self.size = 1
 
-    def get_previous(self, index):
-        current = self.head.next
-        for _ in range(index):
-            current = current.next
-        return current
+    def visit(self, url: str) -> None:
+        """
+        Visits url from the current page. It clears up all the forward history.
+        """
+        new_node = DoublyLinkedNode(value=url, previous=self.current_position)
+        self.current_position.next = new_node
+        self.current_position = new_node
+        self.tail = new_node
+        self.current_index += 1
+        self.size = self.current_index + 1
 
-    def get(self, index: int) -> int:
-        if index >= self.size:
-            return -1
+    def back(self, steps: int) -> str:
+        """
+        Move steps back in history. If you can only return x steps in the history and steps > x,
+        you will return only x steps. Return the current url after moving back in history at most steps.
+        """
+        if steps >= self.current_index:
+            self.current_index = 0
+            self.current_position = self.head
+            return self.current_position.value
 
-        current = self.get_previous(index)
-        return current.value
+        for _ in range(steps):
+            self.current_index -= 1
+            self.current_position = self.current_position.previous
 
-    def insert_at_head(self, val: int) -> None:
-        head = self.head.next
+        return self.current_position.value
 
-        new_node = DoublyLinkedNode(value=val, previous=head.previous, next=head)
-        head.previous = new_node
-        self.head.next = new_node
+    def forward(self, steps: int) -> str:
+        """
+        Move steps forward in history. If you can only forward x steps in the history and steps > x,
+        you will forward only x steps. Return the current url after forwarding in history at most steps.
+        """
+        if steps >= self.size - self.current_index:
+            self.current_index = self.size - 1
+            self.current_position = self.tail
+            return self.current_position.value
 
-        self.size += 1
+        for _ in range(steps):
+            self.current_index += 1
+            self.current_position = self.current_position.next
 
-    def insert_at_tail(self, val: int) -> None:
-        tail = self.tail
-
-        new_node = DoublyLinkedNode(value=val, previous=tail.previous, next=tail)
-        tail.previous.next = new_node
-        tail.previous = new_node
-
-        self.size += 1
-
-    def insert_at_index(self, index: int, val: int) -> None:
-        if index > self.size:
-            return
-
-        if index == self.size:
-            return self.insert_at_tail(val)
-
-        current = self.get_previous(index)
-        new_node = DoublyLinkedNode(value=val, previous=current.previous, next=current)
-        current.previous.next = new_node
-        current.previous = new_node
-        self.size += 1
-        return
-
-    def delete_at_tail(self):
-        self.tail = self.tail.previous
-        self.tail.next = None
-        self.size -= 1
-        return
-
-    def delete_at_index(self, index: int) -> None:
-        if index >= self.size:
-            return
-
-        if index == self.size - 1:
-            return self.delete_at_tail()
-
-        current = self.get_previous(index)
-        current.previous.next = current.next
-        current.next.previous = current.previous
-
-        self.size -= 1
+        return self.current_position.value
 
     def print_list(self):
         values = []
-        head = self.head.next
-        while head.next:
+        head = self.head
+        while head:
             values.append(str(head.value))
             head = head.next
         print(" -> ".join(values))
 
 
-# Explanation
-my_doubly_linked_list: DoublyLinkedList = DoublyLinkedList()
-print(my_doubly_linked_list.get(0))
+# TEST CASE 1
+# browser_history: BrowserHistory = BrowserHistory("leetcode.com")
+# print(browser_history.current_position.value)
 
-my_doubly_linked_list.insert_at_head(9)
-my_doubly_linked_list.print_list()
+# browser_history.visit("google.com")
+# browser_history.visit("facebook.com")
+# browser_history.visit("youtube.com")
+# browser_history.print_list()
+# print(f"Current position: {browser_history.current_position.value}", end="\n\n")
 
-my_doubly_linked_list.insert_at_tail(111)
-my_doubly_linked_list.print_list()
+# # Back and forward
+# print(browser_history.back(1))  #       Should return "facebook.com"
+# print(browser_history.back(1))  #       Should return "google.com"
+# print(browser_history.forward(1))  #    Should return "facebook.com"
+# print(f"Current position: {browser_history.current_position.value}", end="\n\n")
 
+# browser_history.visit("linkedin.com")
+# print(f"Current position: {browser_history.current_position.value}", end="\n\n")
+# browser_history.print_list()
 
-my_doubly_linked_list.insert_at_head(8)
-my_doubly_linked_list.insert_at_tail(112)
-my_doubly_linked_list.print_list()
-
-print(my_doubly_linked_list.get(5))
-print(my_doubly_linked_list.get(3))
-
-
-my_doubly_linked_list.insert_at_index(2, 50)
-my_doubly_linked_list.print_list()
-
-my_doubly_linked_list.insert_at_index(3, 60)
-my_doubly_linked_list.print_list()
-
-
-my_doubly_linked_list.insert_at_index(my_doubly_linked_list.size, 155)
-my_doubly_linked_list.print_list()
-
-my_doubly_linked_list.insert_at_index(0, 7)
-my_doubly_linked_list.print_list()
-
-my_doubly_linked_list.delete_at_index(12)
-my_doubly_linked_list.delete_at_index(2)
-my_doubly_linked_list.print_list()
+# print(browser_history.forward(2))  #    Cannot forward - should return "linkedin.com"
+# print(browser_history.back(2))  #       Should return "google.com"
+# print(browser_history.back(7))  #       Should return "leetcode.com"
 
 
-# Deleting edge cases
-my_doubly_linked_list.delete_at_index(0)
-my_doubly_linked_list.print_list()
-my_doubly_linked_list.delete_at_index(my_doubly_linked_list.size - 1)
-my_doubly_linked_list.print_list()
+# TEST CASE 2
+# browser_history_2: BrowserHistory = BrowserHistory("zav.com")
+# browser_history_2.visit("kni.com")
+# print(f"Current position: {browser_history_2.current_position.value}", end="\n\n")
+# browser_history_2.print_list()
 
-my_doubly_linked_list.insert_at_tail(212)
-my_doubly_linked_list.print_list()
+# print(browser_history_2.back(7))  #       Should return "zav.com"
+# print(browser_history_2.back(7))  #       Should return "zav.com"
+# print(f"Current position: {browser_history_2.current_position.value}", end="\n\n")
+
+# print(browser_history_2.forward(5))  #    Cannot forward - should return "kni.com"
+# print(f"Current position: {browser_history_2.current_position.value}", end="\n\n")
+# print(browser_history_2.forward(1))  #    Cannot forward - should return "kni.com"
+
+# browser_history_2.visit("pwrrbnw.com")
+# browser_history_2.visit("mosohif.com")
+# print(browser_history_2.back(9))  #       Should return "zav.com"
