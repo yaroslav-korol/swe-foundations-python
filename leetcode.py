@@ -373,7 +373,7 @@ class BrowserHistory:
 # print(browser_history_2.back(9))  #       Should return "zav.com"
 
 
-# 225. Implement Stack using Singly Linked List
+# 225.a Implement Stack using Singly Linked List
 class MyLinkedListStack:
     def __init__(self):
         self.head = SinglyLinkedNode(-99)
@@ -413,15 +413,62 @@ class MyLinkedListStack:
 # Output
 # [null, null, null, 2, 2, false]
 
-my_stack: MyLinkedListStack = MyLinkedListStack()
+# my_stack: MyLinkedListStack = MyLinkedListStack()
 
-# EDGE CASE
-print(my_stack.empty())
+# # EDGE CASE
+# print(my_stack.empty())
 
-my_stack.push(1)
-my_stack.push(2)
-my_stack.print_list()
+# my_stack.push(1)
+# my_stack.push(2)
+# my_stack.print_list()
 
-print(my_stack.top())  #       return 2
-print(my_stack.pop())  #       return 2
-print(my_stack.empty())  #     return False
+# print(my_stack.top())  #       return 2
+# print(my_stack.pop())  #       return 2
+# print(my_stack.empty())  #     return False
+
+
+# 225.b Implement Stack using Queue
+from collections import deque
+
+
+class MyQueueStack:
+    def __init__(self):
+        self.queue = deque()
+
+    def push(self, x: int) -> None:
+        """Pushes element x to the top of the stack."""
+        self.queue.append(x)
+        for _ in range(len(self.queue) - 1):
+            self.queue.append(self.queue.popleft())
+
+    def pop(self) -> int:
+        """Removes the element on the top of the stack and returns it."""
+        return self.queue.popleft() if not self.empty() else -1
+
+    def top(self) -> int:
+        """Returns the element on the top of the stack."""
+        return self.queue[0] if not self.empty() else -1
+
+    def empty(self) -> bool:
+        """Returns true if the stack is empty, false otherwise."""
+        return len(self.queue) == 0
+
+
+# TEST CASE 1:
+# ["MyStack", "push", "push", "top", "pop", "empty"]
+# [[], [1], [2], [], [], []]
+# Output
+# [null, null, null, 2, 2, false]
+
+my_queue_stack: MyQueueStack = MyQueueStack()
+
+# # EDGE CASE
+print(my_queue_stack.empty())
+
+my_queue_stack.push(1)
+my_queue_stack.push(2)
+print(my_queue_stack.queue)
+
+print(my_queue_stack.top())  #       return 2
+print(my_queue_stack.pop())  #       return 2
+print(my_queue_stack.empty())  #     return False
