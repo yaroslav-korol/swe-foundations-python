@@ -191,15 +191,17 @@
 
 # Merge 2 linked lists
 # Definition for singly-linked list.
-class ListNode:
+class SinglyLinkedNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
 
 class MergeSolution:
-    def mergeTwoLists(self, list1: list[ListNode], list2: list[ListNode]) -> list[ListNode]:
-        merged_head: ListNode = ListNode()
+    def mergeTwoLists(
+        self, list1: list[SinglyLinkedNode], list2: list[SinglyLinkedNode]
+    ) -> list[SinglyLinkedNode]:
+        merged_head: SinglyLinkedNode = SinglyLinkedNode()
         merged_tail = merged_head
 
         while list1 and list2:
@@ -225,15 +227,15 @@ class MergeSolution:
 def create_linked_list(values):
     if not values:
         return None
-    head = ListNode(values[0])
+    head = SinglyLinkedNode(values[0])
     current = head
     for val in values[1:]:
-        current.next = ListNode(val)
+        current.next = SinglyLinkedNode(val)
         current = current.next
     return head
 
 
-def print_linked_list(head: list[ListNode]):
+def print_linked_list(head: list[SinglyLinkedNode]):
     values = []
     while head:
         values.append(str(head.val))
@@ -369,3 +371,57 @@ class BrowserHistory:
 # browser_history_2.visit("pwrrbnw.com")
 # browser_history_2.visit("mosohif.com")
 # print(browser_history_2.back(9))  #       Should return "zav.com"
+
+
+# 225. Implement Stack using Singly Linked List
+class MyLinkedListStack:
+    def __init__(self):
+        self.head = SinglyLinkedNode(-99)
+
+    def push(self, x: int) -> None:
+        """Pushes element x to the top of the stack."""
+        new_node = SinglyLinkedNode(val=x, next=self.head.next)
+        self.head.next = new_node
+
+    def pop(self) -> int:
+        """Removes the element on the top of the stack and returns it."""
+        val = self.head.next.val
+        self.head.next = self.head.next.next
+        return val
+
+    def top(self) -> int:
+        """Returns the element on the top of the stack."""
+        return self.head.next.val
+
+    def empty(self) -> bool:
+        """Returns true if the stack is empty, false otherwise."""
+        return False if self.head.next else True
+        # return self.head.next
+
+    def print_list(self):
+        values = []
+        head = self.head.next
+        while head:
+            values.append(str(head.val))
+            head = head.next
+        print(" -> ".join(values))
+
+
+# TEST CASE 1:
+# ["MyStack", "push", "push", "top", "pop", "empty"]
+# [[], [1], [2], [], [], []]
+# Output
+# [null, null, null, 2, 2, false]
+
+my_stack: MyLinkedListStack = MyLinkedListStack()
+
+# EDGE CASE
+print(my_stack.empty())
+
+my_stack.push(1)
+my_stack.push(2)
+my_stack.print_list()
+
+print(my_stack.top())  #       return 2
+print(my_stack.pop())  #       return 2
+print(my_stack.empty())  #     return False
