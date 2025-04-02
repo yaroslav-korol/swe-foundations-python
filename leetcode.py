@@ -460,15 +460,253 @@ class MyQueueStack:
 # Output
 # [null, null, null, 2, 2, false]
 
-my_queue_stack: MyQueueStack = MyQueueStack()
+# my_queue_stack: MyQueueStack = MyQueueStack()
 
-# # EDGE CASE
-print(my_queue_stack.empty())
+# # # EDGE CASE
+# print(my_queue_stack.empty())
 
-my_queue_stack.push(1)
-my_queue_stack.push(2)
-print(my_queue_stack.queue)
+# my_queue_stack.push(1)
+# my_queue_stack.push(2)
+# print(my_queue_stack.queue)
 
-print(my_queue_stack.top())  #       return 2
-print(my_queue_stack.pop())  #       return 2
-print(my_queue_stack.empty())  #     return False
+# print(my_queue_stack.top())  #       return 2
+# print(my_queue_stack.pop())  #       return 2
+# print(my_queue_stack.empty())  #     return False
+
+
+# 1700. Number of Students Unable to Eat Lunch
+class StudentsWithoutLunch:
+    def get_students_preferences(self, students: list[int]) -> tuple[int]:
+        preference_zeros = 0
+        preference_ones = 0
+        for student in students:
+            if student == 0:
+                preference_zeros += 1
+            else:
+                preference_ones += 1
+
+        return (preference_zeros, preference_ones)
+
+    def countStudents(self, students: list[int], sandwiches: list[int]) -> int:
+        zeros, ones = self.get_students_preferences(students)
+        i = 0
+
+        for _ in range(len(students)):
+            if sandwiches[i] == 0 and zeros > 0:
+                zeros -= 1
+                i += 1
+            elif sandwiches[i] == 1 and ones > 0:
+                ones -= 1
+                i += 1
+
+        return zeros + ones
+
+
+# # Test case 1
+# students = [1, 1, 0, 0]
+# sandwiches = [0, 1, 0, 1]
+# test_1: StudentsWithoutLunch = StudentsWithoutLunch()
+# print(test_1.countStudents(students, sandwiches))
+# # Output: 0
+
+
+# # Test case 2
+# students = [1, 1, 1, 0, 0, 1]
+# sandwiches = [1, 0, 0, 0, 1, 1]
+# test_2: StudentsWithoutLunch = StudentsWithoutLunch()
+# print(test_2.countStudents(students, sandwiches))
+# # Output: 3
+
+
+# RECURSION PRACTICE
+
+
+# Factorial
+def factorial(n):
+    if n <= 1:
+        return 1
+
+    return n * factorial(n - 1)
+
+
+# print(factorial(5))
+
+
+# Reverse string recursively
+def revert_string_recursively(str):
+    if len(str) <= 1:
+        return str
+
+    return revert_string_recursively(str[1:]) + str[0]
+
+
+# print(revert_string_recursively("abcde"))
+
+
+# abcd -> bcd -> cd -> d
+# def is_palindrome_recursively(str):
+#     if len(str) <= 1:
+#         return True
+
+#     if str[0] != str[-1]:
+#         return False
+
+#     return is_palindrome_recursively(str[1:-1])
+
+
+def is_palindrome_recursively(s, left, right):
+    if left >= right:
+        return True
+
+    if not s[left].isalnum():
+        return is_palindrome_recursively(s, left + 1, right)
+
+    if not s[right].isalnum():
+        return is_palindrome_recursively(s, left, right - 1)
+
+    if s[left].lower() != s[right].lower():
+        return False
+
+    return is_palindrome_recursively(s, left + 1, right - 1)
+
+
+def is_palindrome(string):
+    string_len = len(string)
+
+    if string_len == 0:
+        return True
+
+    return is_palindrome_recursively(string, 0, string_len - 1)
+
+
+# print(is_palindrome("carabarac"))
+
+
+# Fibonacci recursive
+
+
+# Valid anagram using hash map
+class IsAnagramSolution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+
+        s_freq = {}
+        t_freq = {}
+
+        for i in range(len(s)):
+            if s[i] not in s_freq:
+                s_freq[s[i]] = 1
+            else:
+                s_freq[s[i]] += 1
+
+            if t[i] not in t_freq:
+                t_freq[t[i]] = 1
+            else:
+                t_freq[t[i]] += 1
+
+        print(s_freq, t_freq)
+
+        return s_freq == t_freq
+
+
+# # Test case 1
+# s_1 = "racecar"
+# t_1 = "carrace"
+
+# check = IsAnagramSolution()
+# print(check.isAnagram(s=s_1, t=t_1))
+
+# # Test case 2
+# s_2 = "jar"
+# t_2 = "jam"
+
+# check = IsAnagramSolution()
+# print(check.isAnagram(s=s_2, t=t_2))
+
+
+# Recursive LL
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+
+# Iterative solution
+def reverse_list(head):
+    previous = None
+
+    while head:
+        temp_next = head.next
+        head.next = previous
+        previous = head
+        head = temp_next
+
+    return previous
+
+
+# Recursive solution
+def reverse_list_recursive(head):
+    if not head:
+        return None
+
+    new_head = head  # 1 # 2
+    if head.next:
+        new_head = reverse_list_recursive(head.next)  # new_head = (2 -> None)
+        head.next.next = head
+
+    head.next = None
+    return new_head
+
+
+def reverse_list_recursive_opt(head, previous=None):
+    if not head:
+        return previous
+
+    next = head.next
+    head.next = previous
+
+    return reverse_list_recursive_opt(next, head)
+
+
+#   1 -> 2 -> None
+
+#   a -> b -> c
+#   a.val = a
+#   a.next = b
+
+#   b.val = b
+#   b.next = None
+
+
+#   b -> a
+#   temp = a.next
+#   a.next = previous
+#   previous = a
+#   current = temp
+
+
+a = Node("a")
+b = Node("b")
+c = Node("c")
+d = Node("d")
+e = Node("e")
+f = Node("f")
+
+a.next = b
+b.next = c
+c.next = d
+d.next = e
+e.next = f
+
+# a -> b -> c -> d -> e -> f
+print_linked_list(a)
+
+# reverted_head = reverse_list(a)  # f -> e -> d -> c -> b -> a
+# print_linked_list(reverted_head)
+
+# recursively_reverted_head = reverse_list_recursive(a)
+# print_linked_list(recursively_reverted_head)
+
+recursively_reverted_opt_head = reverse_list_recursive_opt(a)
+print_linked_list(recursively_reverted_opt_head)
