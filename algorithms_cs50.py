@@ -87,6 +87,17 @@ def bubble_sort(sequence: list[int]) -> int:
     return 1
 
 
+# INSERTION SORT
+def insertion_sort(iterable: list) -> list:
+    for i in range(len(iterable)):
+        j = i - 1
+        while j >= 0 and iterable[j] > iterable[j + 1]:
+            iterable[j], iterable[j + 1] = iterable[j + 1], iterable[j]
+            j -= 1
+
+    return iterable
+
+
 # MERGE SORT
 def merge_sort(sequence: list[int], sorted_list: list = []) -> int:
     sorted_list = sorted_list
@@ -150,13 +161,20 @@ def main():
 
     # Merge sort
 
-    list_for_merge_sort: list[int] = [i for i in UNORDERED_NUMS]
-    print(list_for_merge_sort)
+    # list_for_merge_sort: list[int] = [i for i in UNORDERED_NUMS]
+    # print(list_for_merge_sort)
 
-    merge_sort(list_for_merge_sort)
+    # merge_sort(list_for_merge_sort)
 
-    print(list_for_merge_sort)
-    print(UNORDERED_NUMS)
+    # print(list_for_merge_sort)
+
+    # Insertion sort
+    list_for_insertion_sort: list[int] = [i for i in UNORDERED_NUMS]
+    print(f"Before insertion sort: {list_for_insertion_sort}")
+
+    sorting_history = insertion_sort(list_for_insertion_sort)
+    print(f"Insertion sort return result: {sorting_history}")
+    print(f"Original list after sorting: {list_for_insertion_sort}")
 
 
 if __name__ == "__main__":
