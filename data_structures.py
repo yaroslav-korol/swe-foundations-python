@@ -1,4 +1,111 @@
-# Design min stack
+# DATA STRUCTURES IMPLEMENTATION
+
+
+# DYNAMIC ARRAY (RESIZABLE ARRAY)
+class DynamicArray:
+    """ "Initialize an empty array
+    with a capacity of capacity, where capacity > 0.
+    """
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.size = 0
+        self.array = [-99] * self.capacity
+
+    def get(self, i: int) -> int:
+        """Return the element at index i. Assume that index i is valid."""
+        return self.array[i]
+
+    def set(self, i: int, n: int) -> None:
+        """Set the element at index i to n."""
+        self.array[i] = n
+
+    def pushback(self, n: int) -> None:
+        """Push the element n to the end of the array.
+        If the array is full, resize the array first.
+        """
+        if self.size == self.capacity:
+            self.resize()
+
+        self.array[self.size] = n
+        self.size += 1
+
+    def popback(self) -> int:
+        """Pop and return the element at the end of the array.
+        Assume that the array is non-empty.
+        """
+        self.size -= 1 if self.size > 0 else 0
+        popped_value = self.array[self.size]
+        self.array[self.size] = -99
+        return popped_value
+
+    def resize(self) -> None:
+        """Double the capacity of the array."""
+        self.capacity *= 2
+        new_array = [-99] * self.capacity
+
+        for i in range(self.size):
+            new_array[i] = self.array[i]
+
+        self.array = new_array
+
+    def getSize(self) -> int:
+        """Return the number of elements in the array."""
+        return self.size
+
+    def getCapacity(self) -> int:
+        """Return the capacity of the array."""
+        return self.capacity
+
+
+# TEST CASES
+
+# Example 1:
+print("Test 1")
+arr_1: DynamicArray = DynamicArray(1)
+print(arr_1.getSize() == 0)  # should return 0
+print(arr_1.getCapacity() == 1)  # should return 1
+
+# # Example 2:
+print("\n\nTest 2")
+arr_2: DynamicArray = DynamicArray(1)
+arr_2.pushback(1)
+print(arr_2.getCapacity() == 1)  # should return 1
+arr_2.pushback(2)
+# print(arr_2.getCapacity())  # should return 2
+print(f"Capacity: {arr_2.getCapacity()} is correct - {arr_2.getCapacity() == 2}")
+
+
+# # Example 3:
+print("\n\nTest 3")
+arr_3: DynamicArray = DynamicArray(1)
+print(arr_3.getSize())  # should return 0
+# print(arr_3.getCapacity())  # should return 1
+print(f"Capacity: {arr_3.getCapacity()} is correct - {arr_3.getCapacity() == 1}\n")
+
+arr_3.pushback(1)
+print(arr_3.getSize())  # should return 1
+# print(arr_3.getCapacity())  # should return 1
+print(f"Capacity: {arr_3.getCapacity()} is correct - {arr_3.getCapacity() == 1}\n")
+
+arr_3.pushback(2)
+print(arr_3.getSize())  # should return 2
+# print(arr_3.getCapacity())  # should return 2
+print(f"Capacity: {arr_3.getCapacity()} is correct - {arr_3.getCapacity() == 2}\n")
+
+# print(arr_3.get(1))  # should return 2
+print(f"self.get(): {arr_3.get(1)} is correct - {arr_3.get(1) == 2}")
+arr_3.set(1, 3)
+# print(arr_3.get(1))  # should return 3
+print(f"self.get(): {arr_3.get(1)} is correct - {arr_3.get(1) == 3}\n")
+
+print(arr_3.popback())  # should return 3
+print(arr_3.getSize())  # should return 1
+# print(arr_3.getCapacity())  # should return 2
+print(f"Capacity: {arr_3.getCapacity()} is correct - {arr_3.getCapacity() == 2}")
+
+
+# MIN STACK
 class MinStack:
     def __init__(self):
         self.stack: list[int] = []
@@ -34,9 +141,7 @@ class MinStack:
 # print(min_stack.min_values_stack)
 
 
-# 2. Singly Linked List
-
-
+# SINGLY LINKED LIST
 class SinglyLinkedNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -162,7 +267,7 @@ class SinglyLinkedList:
 # print(my_linked_list.get_values())
 
 
-# 3. Doubly Linked list Implementation
+# DOUBLY LINKED LIST
 class DoublyLinkedNode:
     def __init__(self, value=0, next=None, previous=None):
         self.value = value
@@ -251,48 +356,48 @@ class DoublyLinkedList:
         print(" -> ".join(values))
 
 
-# Explanation
-my_doubly_linked_list: DoublyLinkedList = DoublyLinkedList()
-print(my_doubly_linked_list.get(0))
+# # Explanation
+# my_doubly_linked_list: DoublyLinkedList = DoublyLinkedList()
+# print(my_doubly_linked_list.get(0))
 
-my_doubly_linked_list.insert_at_head(9)
-my_doubly_linked_list.print_list()
+# my_doubly_linked_list.insert_at_head(9)
+# my_doubly_linked_list.print_list()
 
-my_doubly_linked_list.insert_at_tail(111)
-my_doubly_linked_list.print_list()
-
-
-my_doubly_linked_list.insert_at_head(8)
-my_doubly_linked_list.insert_at_tail(112)
-my_doubly_linked_list.print_list()
-
-print(my_doubly_linked_list.get(5))
-print(my_doubly_linked_list.get(3))
+# my_doubly_linked_list.insert_at_tail(111)
+# my_doubly_linked_list.print_list()
 
 
-my_doubly_linked_list.insert_at_index(2, 50)
-my_doubly_linked_list.print_list()
+# my_doubly_linked_list.insert_at_head(8)
+# my_doubly_linked_list.insert_at_tail(112)
+# my_doubly_linked_list.print_list()
 
-my_doubly_linked_list.insert_at_index(3, 60)
-my_doubly_linked_list.print_list()
-
-
-my_doubly_linked_list.insert_at_index(my_doubly_linked_list.size, 155)
-my_doubly_linked_list.print_list()
-
-my_doubly_linked_list.insert_at_index(0, 7)
-my_doubly_linked_list.print_list()
-
-my_doubly_linked_list.delete_at_index(12)
-my_doubly_linked_list.delete_at_index(2)
-my_doubly_linked_list.print_list()
+# print(my_doubly_linked_list.get(5))
+# print(my_doubly_linked_list.get(3))
 
 
-# Deleting edge cases
-my_doubly_linked_list.delete_at_index(0)
-my_doubly_linked_list.print_list()
-my_doubly_linked_list.delete_at_index(my_doubly_linked_list.size - 1)
-my_doubly_linked_list.print_list()
+# my_doubly_linked_list.insert_at_index(2, 50)
+# my_doubly_linked_list.print_list()
 
-my_doubly_linked_list.insert_at_tail(212)
-my_doubly_linked_list.print_list()
+# my_doubly_linked_list.insert_at_index(3, 60)
+# my_doubly_linked_list.print_list()
+
+
+# my_doubly_linked_list.insert_at_index(my_doubly_linked_list.size, 155)
+# my_doubly_linked_list.print_list()
+
+# my_doubly_linked_list.insert_at_index(0, 7)
+# my_doubly_linked_list.print_list()
+
+# my_doubly_linked_list.delete_at_index(12)
+# my_doubly_linked_list.delete_at_index(2)
+# my_doubly_linked_list.print_list()
+
+
+# # Deleting edge cases
+# my_doubly_linked_list.delete_at_index(0)
+# my_doubly_linked_list.print_list()
+# my_doubly_linked_list.delete_at_index(my_doubly_linked_list.size - 1)
+# my_doubly_linked_list.print_list()
+
+# my_doubly_linked_list.insert_at_tail(212)
+# my_doubly_linked_list.print_list()
