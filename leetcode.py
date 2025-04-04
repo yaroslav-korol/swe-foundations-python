@@ -461,10 +461,16 @@ class MyQueueStack:
 # [null, null, null, 2, 2, false]
 
 # my_queue_stack: MyQueueStack = MyQueueStack()
+# my_queue_stack: MyQueueStack = MyQueueStack()
 
 # # # EDGE CASE
 # print(my_queue_stack.empty())
+# # # EDGE CASE
+# print(my_queue_stack.empty())
 
+# my_queue_stack.push(1)
+# my_queue_stack.push(2)
+# print(my_queue_stack.queue)
 # my_queue_stack.push(1)
 # my_queue_stack.push(2)
 # print(my_queue_stack.queue)
@@ -646,27 +652,14 @@ def reverse_list(head):
 
 
 # Recursive solution
-def reverse_list_recursive(head):
-    if not head:
-        return None
-
-    new_head = head  # 1 # 2
-    if head.next:
-        new_head = reverse_list_recursive(head.next)  # new_head = (2 -> None)
-        head.next.next = head
-
-    head.next = None
-    return new_head
-
-
-def reverse_list_recursive_opt(head, previous=None):
+def reverse_list_recursively(head, previous=None):
     if not head:
         return previous
 
-    next = head.next
+    new_next = head.next
     head.next = previous
 
-    return reverse_list_recursive_opt(next, head)
+    return reverse_list_recursively(new_next, head)
 
 
 #   1 -> 2 -> None
@@ -700,13 +693,48 @@ d.next = e
 e.next = f
 
 # a -> b -> c -> d -> e -> f
-print_linked_list(a)
+# print_linked_list(a)
 
 # reverted_head = reverse_list(a)  # f -> e -> d -> c -> b -> a
 # print_linked_list(reverted_head)
 
-# recursively_reverted_head = reverse_list_recursive(a)
+
+# recursively_reverted_head = reverse_list_recursively(a)
 # print_linked_list(recursively_reverted_head)
 
-recursively_reverted_opt_head = reverse_list_recursive_opt(a)
-print_linked_list(recursively_reverted_opt_head)
+
+class ClimbStairsSolution:
+    def climbStairs(self, n: int) -> int:
+        # base case
+        if n <= 1:
+            return 1
+
+        # recursive case
+        return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+
+
+# TEST CASES
+
+# Example 1:
+# Input:
+n_1 = 2  # Output: 2
+
+# Explanation:
+# 1 + 1 = 2
+# 2 = 2
+
+
+# Example 2:
+# Input:
+n_2 = 3  # Output: 3
+
+# Explanation:
+# 1 + 1 + 1 = 3
+# 1 + 2 = 3
+# 2 + 1 = 3
+
+
+test = ClimbStairsSolution()
+
+print(test.climbStairs(n_1))
+print(test.climbStairs(n_2))
