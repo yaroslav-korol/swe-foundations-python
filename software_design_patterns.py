@@ -1,14 +1,13 @@
 # SOFTWARE (Object-Oriented) DESIGN PATTERNS
 
+from abc import ABC, abstractmethod
+from enum import Enum
 
 # CREATIONAL PATTERNS:
 
 # FACTORY METHOD
 #   The Factory Method is a creational design pattern that provides an interface for creating objects
 #   in a superclass but allows subclasses to alter the type of objects that will be created.
-
-
-from abc import ABC, abstractmethod
 
 
 class Vehicle(ABC):
@@ -105,11 +104,151 @@ class Singleton:
 
 
 # BUILDER
+#   The Builder is a creational design pattern that allows the construction of complex objects step by step.
+#   It is useful when an object has several components and it's desirable to construct the object with various configurations.
+
+
+class Starter(Enum):
+    SALAD = 1
+    SOUP = 2
+    BRUSCHETTA = 3
+    VEGGIE_STICKS = 4
+    CHICKEN_WINGS = 5
+
+
+class MainCourse(Enum):
+    GRILLED_CHICKEN = 1
+    PASTA = 2
+    VEGGIE_STIR_FRY = 3
+    FISH = 4
+    PIZZA = 5
+
+
+class Dessert(Enum):
+    FRUIT_SALAD = 1
+    ICE_CREAM = 2
+    CHOCOLATE_CAKE = 3
+    VEGAN_PUDDING = 4
+    CHEESECAKE = 5
+
+
+class Drink(Enum):
+    WATER = 1
+    VEGAN_SHAKE = 2
+    SODA = 3
+    FRUIT_JUICE = 4
+
+
+# Product type
+class Meal:
+    def __init__(self):
+        self._starter = None
+        self._main = None
+        self._dessert = None
+        self._drink = None
+
+    @property
+    def starter(self) -> str:
+        return self._starter
+
+    @property
+    def main_course(self) -> str:
+        return self._main_course
+
+    @property
+    def desert(self) -> str:
+        return self._desert
+
+    @property
+    def drink(self) -> str:
+        return self._drink
+
+    @starter.setter
+    def starter(self, starter: str) -> None:
+        self._starter = starter
+
+    @main_course.setter
+    def main_course(self, main_course: str) -> None:
+        self._main_course = main_course
+
+    @desert.setter
+    def desert(self, desert: str) -> None:
+        self._desert = desert
+
+    @drink.setter
+    def drink(self, drink: str) -> None:
+        self._drink = drink
+
+
+# Builder Interface
+class BuilderInterface(ABC):
+    @abstractmethod
+    def add_starter():
+        pass
+
+    @abstractmethod
+    def add_main_course():
+        pass
+
+    @abstractmethod
+    def add_desert():
+        pass
+
+    @abstractmethod
+    def add_drink():
+        pass
+
+
+# Concrete Builder
+class DinnerBuilder(BuilderInterface):
+    def __init__(self):
+        self._meal: Meal = Meal()
+
+    def add_starter(self, starter: str) -> None:
+        self._meal.starter = starter
+
+    def add_main_course(self, main_course: str) -> None:
+        self._meal.main_course = main_course
+
+    def add_desert(self, desert: str) -> None:
+        self._meal.desert = desert
+
+    def add_drink(self, drink: str) -> None:
+        self._meal.drink = drink
+
+    def build(self) -> Meal:
+        return self._meal
+
+
+# Director
+class Director:
+    def construct_healthy_dinner(self, builder: BuilderInterface) -> None:
+        builder.add_starter(Starter.SALAD)
+        builder.add_main_course(MainCourse.FISH)
+        builder.add_desert(Dessert.FRUIT_SALAD)
+        builder.add_drink(Drink.WATER)
+
+    def construct_other_meal(self, builder: BuilderInterface) -> None:
+        pass
+
+
+# TEST CASES
+test_builder: BuilderInterface = DinnerBuilder()
+test_director: Director = Director()
+
+test_director.construct_healthy_dinner(test_builder)
+my_healthy_meal: Meal = test_builder.build()
+
+print("Meal constructed")
+print(f"Starter: {my_healthy_meal.starter}")
+print(f"Main: {my_healthy_meal.main_course}")
+print(f"Desert: {my_healthy_meal.desert}")
+print(f"Drink: {my_healthy_meal.drink}")
 
 
 # PROTOTYPE
 #   The Prototype is a creational design pattern that allows an object to copy itself.
-#   It is particularly useful when the creation of an object is more convenient through
+#   iIt is particularly useful when the creation of an object is more convenient through
 #   copying an existing object than through creation from scratch.
 
 
@@ -151,22 +290,22 @@ class Test:
 
 
 # TEST CASES
-square = Square(10)  # 10 is the length
-another_square = square.clone()  # Clone with length 10
-print(square == another_square)  # False
+# square = Square(10)  # 10 is the length
+# another_square = square.clone()  # Clone with length 10
+# print(square == another_square)  # False
 
-rectangle = Rectangle(10, 20)  # 10 is width, 20 is height
-another_rectangle = rectangle.clone()  # Clone with width 10 and height 20
-print(rectangle == another_rectangle)  # False
+# rectangle = Rectangle(10, 20)  # 10 is width, 20 is height
+# another_rectangle = rectangle.clone()  # Clone with width 10 and height 20
+# print(rectangle == another_rectangle)  # False
 
-test = Test()
-shapes = [square, rectangle, another_square, another_rectangle]
-cloned_shapes = test.clone_shapes(shapes)
+# test = Test()
+# shapes = [square, rectangle, another_square, another_rectangle]
+# cloned_shapes = test.clone_shapes(shapes)
 
-print(shapes == cloned_shapes)  # False
-print(len(shapes) == len(cloned_shapes))  # True
-print(shapes[0] == cloned_shapes[0])  # False
-print(shapes[0].get_length() == cloned_shapes[0].get_length())  # True
+# print(shapes == cloned_shapes)  # False
+# print(len(shapes) == len(cloned_shapes))  # True
+# print(shapes[0] == cloned_shapes[0])  # False
+# print(shapes[0].get_length() == cloned_shapes[0].get_length())  # True
 
 
 # STRUCTURAL PATTERNS:
