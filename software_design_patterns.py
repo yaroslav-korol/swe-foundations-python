@@ -6,6 +6,8 @@
 # FACTORY METHOD
 #   The Factory Method is a creational design pattern that provides an interface for creating objects
 #   in a superclass but allows subclasses to alter the type of objects that will be created.
+
+
 from abc import ABC, abstractmethod
 
 
@@ -66,6 +68,9 @@ class TruckFactory(VehicleFactory):
 
 
 # SINGLETON
+#   The Singleton is a creational design pattern which ensures that at most one instance of a class may exist.
+
+
 class Singleton:
     _is_instance = None
 
@@ -88,18 +93,80 @@ class Singleton:
 
 
 # TEST CASES
-first_instance: Singleton = Singleton()
-print(f"Default 'First instance' value is: {first_instance.getValue()}")
-first_instance.setValue(value="modified first instance value")
-print(f"New 'First instance' value is: {first_instance.getValue()}")
+# first_instance: Singleton = Singleton()
+# print(f"Default 'First instance' value is: {first_instance.getValue()}")
+# first_instance.setValue(value="modified first instance value")
+# print(f"New 'First instance' value is: {first_instance.getValue()}")
 
-second_instance: Singleton = Singleton()
-print(f"Second instance value is: {second_instance.getValue()}")
+# second_instance: Singleton = Singleton()
+# print(f"Second instance value is: {second_instance.getValue()}")
 
-print(first_instance is second_instance)  # True
+# print(first_instance is second_instance)  # True
 
 
 # BUILDER
+
+
+# PROTOTYPE
+#   The Prototype is a creational design pattern that allows an object to copy itself.
+#   It is particularly useful when the creation of an object is more convenient through
+#   copying an existing object than through creation from scratch.
+
+
+class Shape(ABC):
+    @abstractmethod
+    def clone(self):
+        pass
+
+
+class Square(Shape):
+    def __init__(self, length: int):
+        self.length = length
+
+    def get_length(self) -> int:
+        return self.length
+
+    def clone(self) -> Shape:
+        return Square(self.length)
+
+
+class Rectangle(Shape):
+    def __init__(self, width: int, height: int):
+        self.width = width
+        self.height = height
+
+    def get_width(self) -> int:
+        return self.width
+
+    def get_height(self) -> int:
+        return self.height
+
+    def clone(self) -> Shape:
+        return Rectangle(self.width, self.height)
+
+
+class Test:
+    def clone_shapes(self, shapes: list[Shape]) -> list[Shape]:
+        return [shape.clone() for shape in shapes]
+
+
+# TEST CASES
+square = Square(10)  # 10 is the length
+another_square = square.clone()  # Clone with length 10
+print(square == another_square)  # False
+
+rectangle = Rectangle(10, 20)  # 10 is width, 20 is height
+another_rectangle = rectangle.clone()  # Clone with width 10 and height 20
+print(rectangle == another_rectangle)  # False
+
+test = Test()
+shapes = [square, rectangle, another_square, another_rectangle]
+cloned_shapes = test.clone_shapes(shapes)
+
+print(shapes == cloned_shapes)  # False
+print(len(shapes) == len(cloned_shapes))  # True
+print(shapes[0] == cloned_shapes[0])  # False
+print(shapes[0].get_length() == cloned_shapes[0].get_length())  # True
 
 
 # STRUCTURAL PATTERNS:
