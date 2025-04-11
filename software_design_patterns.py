@@ -233,17 +233,17 @@ class Director:
 
 
 # TEST CASES
-test_builder: BuilderInterface = DinnerBuilder()
-test_director: Director = Director()
+# test_builder: BuilderInterface = DinnerBuilder()
+# test_director: Director = Director()
 
-test_director.construct_healthy_dinner(test_builder)
-my_healthy_meal: Meal = test_builder.build()
+# test_director.construct_healthy_dinner(test_builder)
+# my_healthy_meal: Meal = test_builder.build()
 
-print("Meal constructed")
-print(f"Starter: {my_healthy_meal.starter}")
-print(f"Main: {my_healthy_meal.main_course}")
-print(f"Desert: {my_healthy_meal.desert}")
-print(f"Drink: {my_healthy_meal.drink}")
+# print("Meal constructed")
+# print(f"Starter: {my_healthy_meal.starter}")
+# print(f"Main: {my_healthy_meal.main_course}")
+# print(f"Desert: {my_healthy_meal.desert}")
+# print(f"Drink: {my_healthy_meal.drink}")
 
 
 # PROTOTYPE
@@ -310,9 +310,52 @@ class Test:
 
 # STRUCTURAL PATTERNS:
 
-# FACADE
 # ADAPTER
+#   The Adapter is a structural design pattern that allows incompatible interfaces to work together.
+#   It wraps an existing class with a new interface so that it becomes compatible with the client's interface.
+
+
+# Adaptee - Existing (legacy) class
+class XmlLogger:
+    def log(self, message: str) -> str:
+        # Do some work - construct xml log message ...
+        xml_message: str = f"Converted xml message: {message}"
+        return xml_message
+
+
+# Target Interface v.1
+class JsonLogger(ABC):
+    @abstractmethod
+    def log_message(self, message: str) -> str:
+        pass
+
+
+# Target Interface v.2 using Protocol (for decoupling)
+# from typing import Protocol
+# class JsonLogger(Protocol):
+#     def log_message(self, message: str) -> str:
+#         ...
+
+
+# Adapter
+class LoggerAdapter(JsonLogger):
+    def __init__(self, xml_logger: XmlLogger) -> None:
+        self._xml_logger = xml_logger
+
+    def log_message(self, message: str) -> str:
+        return self._xml_logger.log(message)
+
+
+# Client
+legacy_logger: XmlLogger = XmlLogger()
+new_logger = LoggerAdapter(legacy_logger)
+
+default_message: str = "Some test message"
+print(new_logger.log_message(default_message))
+
+
 # DECORATOR
+# FACADE
 
 
 # BEHAVIORAL PATTERNS:
