@@ -346,15 +346,94 @@ class LoggerAdapter(JsonLogger):
         return self._xml_logger.log(message)
 
 
-# Client
-legacy_logger: XmlLogger = XmlLogger()
-new_logger = LoggerAdapter(legacy_logger)
+# TEST CASES
 
-default_message: str = "Some test message"
-print(new_logger.log_message(default_message))
+# Client
+# legacy_logger: XmlLogger = XmlLogger()
+# new_logger = LoggerAdapter(legacy_logger)
+
+# default_message: str = "Some test message"
+# print(new_logger.log_message(default_message))
 
 
 # DECORATOR
+#   The Decorator is a structural design pattern that allows behavior to be added to individual objects,
+#   either statically or dynamically, without affecting the behavior of other objects from the same class.
+
+
+# Component Interface
+class Beverage(ABC):
+    @abstractmethod
+    def get_description(self) -> str:
+        pass
+
+    @abstractmethod
+    def get_cost(self) -> float:
+        pass
+
+
+# Concrete Component
+class BaseCoffee(Beverage):
+    def __init__(self, base_price: float) -> None:
+        self._base_price = base_price
+
+    def get_description(self) -> str:
+        return "It's a base coffee"
+
+    def get_cost(self) -> float:
+        return self._base_price
+
+
+# Abstract Decorator
+class BeverageDecorator(Beverage, ABC):
+    def __init__(self, base_coffee: BaseCoffee):
+        self._base_coffee = base_coffee
+
+    def get_description(self) -> str:
+        return self._base_coffee.get_description()
+
+    def get_cost(self) -> float:
+        return self._base_coffee.get_cost()
+
+
+# Concrete Decorators
+class AddMilkDecorator(BeverageDecorator):
+    def __init__(self, base_coffee: BaseCoffee) -> None:
+        super().__init__(base_coffee)
+
+    def get_description(self) -> str:
+        return super().get_description() + " with Milk"
+
+    def get_cost(self) -> float:
+        return super().get_cost() + 0.5
+
+
+class AddEspressoDecorator(BeverageDecorator):
+    def __init__(self, base_coffee: BaseCoffee):
+        super().__init__(base_coffee)
+
+    def get_description(self) -> str:
+        return super().get_description() + " with additional Espresso"
+
+    def get_cost(self) -> float:
+        return super().get_cost() + 0.7
+
+
+# TEST CASES
+
+# Option 1
+# base_coffee: Beverage = BaseCoffee(base_price=1.1)
+# coffee_with_milk: Beverage = AddMilkDecorator(base_coffee=base_coffee)
+# double_espresso_with_milk: Beverage = AddEspressoDecorator(coffee_with_milk)
+# print(f"Final Beverage: {double_espresso_with_milk.get_description()}")
+# print(f"Final price: {double_espresso_with_milk.get_cost(): .2f}")
+
+# Option 2
+final_drink: Beverage = AddMilkDecorator(AddEspressoDecorator(BaseCoffee(base_price=1.1)))
+print(f"Final Beverage: {final_drink.get_description()}")
+print(f"Final price: {final_drink.get_cost(): .2f}")
+
+
 # FACADE
 
 
