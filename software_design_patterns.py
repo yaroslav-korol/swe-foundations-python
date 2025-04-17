@@ -429,12 +429,83 @@ class AddEspressoDecorator(BeverageDecorator):
 # print(f"Final price: {double_espresso_with_milk.get_cost(): .2f}")
 
 # Option 2
-final_drink: Beverage = AddMilkDecorator(AddEspressoDecorator(BaseCoffee(base_price=1.1)))
-print(f"Final Beverage: {final_drink.get_description()}")
-print(f"Final price: {final_drink.get_cost(): .2f}")
+# final_drink: Beverage = AddMilkDecorator(AddEspressoDecorator(BaseCoffee(base_price=1.1)))
+# print(f"Final Beverage: {final_drink.get_description()}")
+# print(f"Final price: {final_drink.get_cost(): .2f}")
 
 
 # FACADE
+#   The Facade is a structural design pattern that provides a simplified interface to a complex system of classes,
+#   library, or framework. It wraps the complexities of the system and provides a simple interface to clients.
+
+
+class Brightness(Enum):
+    UNKNOWN = "UNKNOWN"
+    BRIGHT = "BRIGHT"
+    DIM = "DIM"
+
+
+class Service(Enum):
+    UNKNOWN = "UNKNOWN"
+    HULU = "HULU"
+    NETFLIX = "NETFLIX"
+    HBO = "HBO"
+
+
+# Subsystem classes
+class SmartLight:
+    def __init__(self) -> None:
+        self._brightness: Brightness = Brightness.UNKNOWN
+
+    def get_brightness(self) -> Brightness:
+        return self._brightness
+
+    def set_brightness(self, brightness: Brightness) -> None:
+        self._brightness = brightness
+
+
+class SmartThermostat:
+    def __init__(self) -> None:
+        self._temperature: int = 19
+
+    def get_temperature(self) -> int:
+        return self._temperature
+
+    def set_temperature(self, temperature: int) -> None:
+        self._temperature = temperature
+
+
+class SmartTV:
+    def __init__(self) -> None:
+        self._stream_service: Service = Service.UNKNOWN
+
+    def get_stream_service(self) -> Service:
+        return self._stream_service
+
+    def set_stream_service(self, stream_service: Service) -> None:
+        self._stream_service = stream_service
+
+
+# Facade Class
+class SmartHome:
+    def __init__(self):
+        self.__lights: SmartLight = SmartLight()
+        self.__thermostat: SmartThermostat = SmartThermostat()
+        self.__tv = SmartTV()
+
+    def set_movie_mode(self) -> str:
+        self.__lights.set_brightness(Brightness.DIM)
+        self.__thermostat.set_temperature(21)
+        self.__tv.set_stream_service(Service.NETFLIX)
+        return "Movie mode is on"
+
+    def set_another_mode(self):
+        pass
+
+
+# Client simulation
+my_home: SmartHome = SmartHome()
+print(my_home.set_movie_mode())
 
 
 # BEHAVIORAL PATTERNS:
