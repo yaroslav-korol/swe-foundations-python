@@ -27,7 +27,7 @@
 
 
 # CONSTANTS
-UNORDERED_NUMS: list[int] = [7, 3, 1, 11, 23, 34, 345, 123, 456, 89, 1001, 134, 567, 5656]
+UNORDERED_NUMS: list[int] = [7, 5656, 3, 1, 11, 23, 34, 345, 123, 456, 89, 1001, 134, 567, 11]
 TARGET_PRESENT: int = 34
 TARGET_ABSENT: int = 340
 
@@ -99,29 +99,9 @@ def insertion_sort(iterable: list) -> list:
 
 
 # MERGE SORT
-def merge_sort(sequence: list[int], sorted_list: list = []) -> int:
-    sorted_list = sorted_list
-    sequence_len: int = len(sequence)
-    middle: int = sequence_len // 2
+def merge_sort(sequence: list, start: int, end: int) -> int:
     # base case
-    if sequence_len < 2:
-        return sequence
-
-    # recursive case
-    left = merge_sort(sequence[:middle], sorted_list)
-    right = merge_sort(sequence[middle:], sorted_list)
-
-    if right > left:
-        # sorted_list.append(left)
-        # sorted_list.append(right)
-        sorted_list += left
-        sorted_list += right
-
-    elif left > left:
-        # sorted_list.append(right)
-        # sorted_list.append(left)
-        sorted_list += right
-        sorted_list += left
+    pass
 
 
 # QUICK SORT
@@ -161,20 +141,22 @@ def main():
 
     # Merge sort
 
-    # list_for_merge_sort: list[int] = [i for i in UNORDERED_NUMS]
-    # print(list_for_merge_sort)
+    list_for_merge_sort: list[int] = [i for i in UNORDERED_NUMS]
+    print(list_for_merge_sort)
 
     # merge_sort(list_for_merge_sort)
 
     # print(list_for_merge_sort)
 
     # Insertion sort
-    list_for_insertion_sort: list[int] = [i for i in UNORDERED_NUMS]
-    print(f"Before insertion sort: {list_for_insertion_sort}")
+    # list_for_insertion_sort: list[int] = [i for i in UNORDERED_NUMS]
+    # print(f"Before insertion sort: {list_for_insertion_sort}")
 
-    sorting_history = insertion_sort(list_for_insertion_sort)
-    print(f"Insertion sort return result: {sorting_history}")
-    print(f"Original list after sorting: {list_for_insertion_sort}")
+    # sorting_history = insertion_sort(list_for_insertion_sort)
+    # print(f"Insertion sort return result: {sorting_history}")
+    # print(f"Original list after sorting: {list_for_insertion_sort}")
+
+    pass
 
 
 if __name__ == "__main__":

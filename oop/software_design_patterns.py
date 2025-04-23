@@ -504,11 +504,18 @@ class SmartHome:
 
 
 # Client simulation
-my_home: SmartHome = SmartHome()
-print(my_home.set_movie_mode())
+# my_home: SmartHome = SmartHome()
+# print(my_home.set_movie_mode())
 
 
 # BEHAVIORAL PATTERNS:
 
 # STRATEGY
+#   The Strategy is a behavioral design pattern that enables selecting an algorithm's runtime behavior.
+#   It defines a family of algorithms, encapsulates each one, and makes them interchangeable.
+
+
 # OBSERVER
+
+
+# STATE
