@@ -515,6 +515,133 @@ class SmartHome:
 #   It defines a family of algorithms, encapsulates each one, and makes them interchangeable.
 
 
+class Lockable(ABC):
+    @abstractmethod
+    def lock():
+        pass
+
+    @abstractmethod
+    def unlock():
+        pass
+
+
+class Openable(ABC):
+    @abstractmethod
+    def open():
+        pass
+
+    @abstractmethod
+    def close():
+        pass
+
+
+class Door(ABC):
+    def __init__(self, dimensions):
+        self.dimensions = dimensions
+        self._lock_behavior = None
+        self._open_behavior = None
+
+    def set_lock_behavior(self, lock_behavior: Lockable):
+        self._lock_behavior = lock_behavior
+
+    def set_open_behavior(self, open_behavior: Openable):
+        self._open_behavior = open_behavior
+
+    def perform_lock(self):
+        self._lock_behavior.lock()
+
+    def perform_unlock(self):
+        self._lock_behavior.unlock()
+
+    def perform_open(self):
+        self._open_behavior.open()
+
+    def perform_close(self):
+        self._open_behavior.close()
+
+    def get_dimensions(self):
+        return self.dimensions
+
+
+class PasswordLock(Lockable):
+    def lock(self):
+        print("Door locked with password")
+
+    def unlock(self):
+        print("Door unlocked with password")
+
+
+class KeyLock(Lockable):
+    def lock(self):
+        print("Door locked with a key")
+
+    def unlock(self):
+        print("Door unlocked with a key")
+
+
+class SlidingOpening(Openable):
+    def open(self):
+        print("The door opened with a sliding mechanism")
+
+    def close(self):
+        print("The door closed with a sliding mechanism")
+
+
+class StandardOpening(Openable):
+    def open(self):
+        print("The door opened with a standard mechanism")
+
+    def close(self):
+        print("The door closed with a standard mechanism")
+
+
+class StandardDoorWithKeyLock(Door):
+    pass
+
+
+class SlidingDoor(Door):
+    pass
+
+
+# Client simulation
+
+# Test 1
+
+# Initialize door
+external_door: StandardDoorWithKeyLock = StandardDoorWithKeyLock(dimensions=12)
+
+# Set behaviors
+external_door.set_lock_behavior(KeyLock())
+external_door.set_open_behavior(StandardOpening())
+
+# Invoke behaviors
+external_door.perform_lock()
+external_door.perform_unlock()
+external_door.perform_open()
+external_door.perform_close()
+
+# Change lock mechanism
+external_door.set_lock_behavior(PasswordLock())
+external_door.perform_lock()
+external_door.perform_unlock()
+
+
+print("\n")
+
+
+# Test 2
+
+sliding_door: SlidingDoor = SlidingDoor(dimensions=24)
+
+sliding_door.set_lock_behavior(PasswordLock())
+sliding_door.set_open_behavior(SlidingOpening())
+
+sliding_door.perform_lock()
+sliding_door.perform_unlock()
+
+sliding_door.perform_open()
+sliding_door.perform_close()
+
 # OBSERVER
 
 
