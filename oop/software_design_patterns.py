@@ -515,6 +515,7 @@ class SmartHome:
 #   It defines a family of algorithms, encapsulates each one, and makes them interchangeable.
 
 
+# Strategy Interfaces
 class Lockable(ABC):
     @abstractmethod
     def lock():
@@ -535,6 +536,7 @@ class Openable(ABC):
         pass
 
 
+# Context (Navigator Class)
 class Door(ABC):
     def __init__(self, dimensions):
         self.dimensions = dimensions
@@ -563,6 +565,7 @@ class Door(ABC):
         return self.dimensions
 
 
+# Concrete Strategies
 class PasswordLock(Lockable):
     def lock(self):
         print("Door locked with password")
@@ -607,23 +610,23 @@ class SlidingDoor(Door):
 
 # Test 1
 
-# Initialize door
-external_door: StandardDoorWithKeyLock = StandardDoorWithKeyLock(dimensions=12)
+# # Initialize door
+# external_door: StandardDoorWithKeyLock = StandardDoorWithKeyLock(dimensions=12)
 
-# Set behaviors
-external_door.set_lock_behavior(KeyLock())
-external_door.set_open_behavior(StandardOpening())
+# # Set behaviors
+# external_door.set_lock_behavior(KeyLock())
+# external_door.set_open_behavior(StandardOpening())
 
-# Invoke behaviors
-external_door.perform_lock()
-external_door.perform_unlock()
-external_door.perform_open()
-external_door.perform_close()
+# # Invoke behaviors
+# external_door.perform_lock()
+# external_door.perform_unlock()
+# external_door.perform_open()
+# external_door.perform_close()
 
-# Change lock mechanism
-external_door.set_lock_behavior(PasswordLock())
-external_door.perform_lock()
-external_door.perform_unlock()
+# # Change lock mechanism
+# external_door.set_lock_behavior(PasswordLock())
+# external_door.perform_lock()
+# external_door.perform_unlock()
 
 
 print("\n")
@@ -631,18 +634,111 @@ print("\n")
 
 # Test 2
 
-sliding_door: SlidingDoor = SlidingDoor(dimensions=24)
+# sliding_door: SlidingDoor = SlidingDoor(dimensions=24)
 
-sliding_door.set_lock_behavior(PasswordLock())
-sliding_door.set_open_behavior(SlidingOpening())
+# sliding_door.set_lock_behavior(PasswordLock())
+# sliding_door.set_open_behavior(SlidingOpening())
 
-sliding_door.perform_lock()
-sliding_door.perform_unlock()
+# sliding_door.perform_lock()
+# sliding_door.perform_unlock()
 
-sliding_door.perform_open()
-sliding_door.perform_close()
+# sliding_door.perform_open()
+# sliding_door.perform_close()
+
 
 # OBSERVER
+#   The Observer is a behavioral design pattern that allows objects to be notified about changes in another object's state.
+
+#   There are technically two implementations of the observer pattern we can implement: push model and a pull model.
+#       - The push model directly updates all the observers after a change in value of the subjects.
+#       - In the pull model, the publisher only informs the subscribers that there has been a change and the subscribers
+#         are responsible for fetching the books themselves if they are interested.
+
+#   In my example below, I use the push model.
+
+
+# Observer (Subscriber) Interface
+class Customer(ABC):
+    @abstractmethod
+    def update(self, stock_quantity: int):
+        pass
+
+
+# Subject (Publisher) Interface
+class Store(ABC):
+    @abstractmethod
+    def add_customer(self, customer: Customer):
+        pass
+
+    @abstractmethod
+    def remove_customer(self, customer: Customer):
+        pass
+
+    @abstractmethod
+    def notify_customers(self):
+        pass
+
+    @abstractmethod
+    def update_quantity(self, quantity: int):
+        pass
+
+
+# Concrete Observer (Subscriber)
+class BookStoreCustomer(Customer):
+    def __init__(self, store: Store):
+        self._store = store
+        self._store.add_customer(self)
+        self._stock_quantity = None
+
+    def update(self, stock_quantity: int) -> None:
+        self._stock_quantity = stock_quantity
+        if self._stock_quantity > 0:
+            print(f"Subscribed book stock updated to: {self._stock_quantity}")
+
+
+# Concrete Subjects
+class BookStore(Store):
+    def __init__(self, quantity: int):
+        self._customers: list[Customer] = []
+        self._stock_quantity = quantity
+
+    def add_customer(self, customer: Customer) -> None:
+        self._customers.append(customer)
+
+    def remove_customer(self, customer: Customer) -> None:
+        self._customers.remove(customer)
+
+    def notify_customers(self) -> None:
+        for customer in self._customers:
+            customer.update(self._stock_quantity)
+
+    def update_quantity(self, quantity: int) -> None:
+        self._stock_quantity = quantity
+        self.notify_customers()
+
+
+# Client simulation
+
+# Test 1
+book_store: BookStore = BookStore(5)
+customer_1: BookStoreCustomer = BookStoreCustomer(store=book_store)
+customer_2: BookStoreCustomer = BookStoreCustomer(store=book_store)
+
+
+# Initially, the book is out of stock
+print("Setting stock to 0.")
+book_store.update_quantity(0)
+
+# The book comes back in stock
+print("Setting stock to 5.")
+book_store.update_quantity(5)
+
+# Remove customer_1 from the notification list
+book_store.remove_customer(customer_1)
+
+# Simulate the situation where the stock changes again
+print("\nSetting stock to 2.")
+book_store.update_quantity(2)
 
 
 # STATE
