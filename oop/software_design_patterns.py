@@ -148,19 +148,19 @@ class Meal:
         self._drink = None
 
     @property
-    def starter(self) -> str:
+    def starter(self) -> Starter:
         return self._starter
 
     @property
-    def main_course(self) -> str:
+    def main_course(self) -> MainCourse:
         return self._main_course
 
     @property
-    def dessert(self) -> str:
+    def dessert(self) -> Dessert:
         return self._dessert
 
     @property
-    def drink(self) -> str:
+    def drink(self) -> Drink:
         return self._drink
 
     @starter.setter
