@@ -143,7 +143,7 @@ class Drink(Enum):
 class Meal:
     def __init__(self):
         self._starter = None
-        self._main = None
+        self._main_course = None
         self._dessert = None
         self._drink = None
 
@@ -156,24 +156,24 @@ class Meal:
         return self._main_course
 
     @property
-    def desert(self) -> str:
-        return self._desert
+    def dessert(self) -> str:
+        return self._dessert
 
     @property
     def drink(self) -> str:
         return self._drink
 
     @starter.setter
-    def starter(self, starter: str) -> None:
+    def starter(self, starter: Starter) -> None:
         self._starter = starter
 
     @main_course.setter
-    def main_course(self, main_course: str) -> None:
+    def main_course(self, main_course: MainCourse) -> None:
         self._main_course = main_course
 
-    @desert.setter
-    def desert(self, desert: str) -> None:
-        self._desert = desert
+    @dessert.setter
+    def dessert(self, dessert: Dessert) -> None:
+        self._dessert = dessert
 
     @drink.setter
     def drink(self, drink: str) -> None:
@@ -183,19 +183,19 @@ class Meal:
 # Builder Interface
 class BuilderInterface(ABC):
     @abstractmethod
-    def add_starter():
+    def add_starter(self, starter: Starter) -> None:
         pass
 
     @abstractmethod
-    def add_main_course():
+    def add_main_course(self, main_course: MainCourse) -> None:
         pass
 
     @abstractmethod
-    def add_desert():
+    def add_dessert(self, dessert: Dessert) -> None:
         pass
 
     @abstractmethod
-    def add_drink():
+    def add_drink(self, drink: Drink) -> None:
         pass
 
 
@@ -204,16 +204,16 @@ class DinnerBuilder(BuilderInterface):
     def __init__(self):
         self._meal: Meal = Meal()
 
-    def add_starter(self, starter: str) -> None:
+    def add_starter(self, starter: Starter) -> None:
         self._meal.starter = starter
 
-    def add_main_course(self, main_course: str) -> None:
+    def add_main_course(self, main_course: MainCourse) -> None:
         self._meal.main_course = main_course
 
-    def add_desert(self, desert: str) -> None:
-        self._meal.desert = desert
+    def add_dessert(self, dessert: Dessert) -> None:
+        self._meal.dessert = dessert
 
-    def add_drink(self, drink: str) -> None:
+    def add_drink(self, drink: Drink) -> None:
         self._meal.drink = drink
 
     def build(self) -> Meal:
@@ -225,7 +225,7 @@ class Director:
     def construct_healthy_dinner(self, builder: BuilderInterface) -> None:
         builder.add_starter(Starter.SALAD)
         builder.add_main_course(MainCourse.FISH)
-        builder.add_desert(Dessert.FRUIT_SALAD)
+        builder.add_dessert(Dessert.FRUIT_SALAD)
         builder.add_drink(Drink.WATER)
 
     def construct_other_meal(self, builder: BuilderInterface) -> None:
@@ -242,7 +242,7 @@ class Director:
 # print("Meal constructed")
 # print(f"Starter: {my_healthy_meal.starter}")
 # print(f"Main: {my_healthy_meal.main_course}")
-# print(f"Desert: {my_healthy_meal.desert}")
+# print(f"dessert: {my_healthy_meal.dessert}")
 # print(f"Drink: {my_healthy_meal.drink}")
 
 
@@ -518,21 +518,21 @@ class SmartHome:
 # Strategy Interfaces
 class Lockable(ABC):
     @abstractmethod
-    def lock():
+    def lock(self):
         pass
 
     @abstractmethod
-    def unlock():
+    def unlock(self):
         pass
 
 
 class Openable(ABC):
     @abstractmethod
-    def open():
+    def open(self):
         pass
 
     @abstractmethod
-    def close():
+    def close(self):
         pass
 
 
@@ -688,7 +688,7 @@ class BookStoreCustomer(Customer):
     def __init__(self, store: Store):
         self._store = store
         self._store.add_customer(self)
-        self._stock_quantity = None
+        self._stock_quantity: int | None = None
 
     def update(self, stock_quantity: int) -> None:
         self._stock_quantity = stock_quantity
@@ -719,26 +719,85 @@ class BookStore(Store):
 
 # Client simulation
 
-# Test 1
-book_store: BookStore = BookStore(5)
-customer_1: BookStoreCustomer = BookStoreCustomer(store=book_store)
-customer_2: BookStoreCustomer = BookStoreCustomer(store=book_store)
+# # Test 1
+# book_store: BookStore = BookStore(5)
+# customer_1: BookStoreCustomer = BookStoreCustomer(store=book_store)
+# customer_2: BookStoreCustomer = BookStoreCustomer(store=book_store)
 
 
-# Initially, the book is out of stock
-print("Setting stock to 0.")
-book_store.update_quantity(0)
+# # Initially, the book is out of stock
+# print("Setting stock to 0.")
+# book_store.update_quantity(0)
 
-# The book comes back in stock
-print("Setting stock to 5.")
-book_store.update_quantity(5)
+# # The book comes back in stock
+# print("Setting stock to 5.")
+# book_store.update_quantity(5)
 
-# Remove customer_1 from the notification list
-book_store.remove_customer(customer_1)
+# # Remove customer_1 from the notification list
+# book_store.remove_customer(customer_1)
 
-# Simulate the situation where the stock changes again
-print("\nSetting stock to 2.")
-book_store.update_quantity(2)
+# # Simulate the situation where the stock changes again
+# print("\nSetting stock to 2.")
+# book_store.update_quantity(2)
 
 
 # STATE
+#   The State is a behavioral design pattern that allows an object to alter its behavior when its internal state changes.
+#   This pattern is often used to encapsulate the state-related behavior within state-specific classes,
+#   avoiding large conditional statements in the object's methods.
+
+
+# State Interface
+class TrafficLightState(ABC):
+    @abstractmethod
+    def change_state(self, traffic_light) -> None:
+        pass
+
+
+# Context
+class TrafficLight:
+    def __init__(self):
+        self._prev_state: TrafficLightState = None
+        self._current_state: TrafficLightState = RedState()
+
+    def get_prev_state(self) -> TrafficLightState:
+        return self._prev_state
+
+    def set_state(self, state: TrafficLightState) -> None:
+        self._prev_state = self._current_state
+        self._current_state = state
+
+    def change(self) -> None:
+        self._current_state.change_state(self)
+
+
+# Concrete State Classes
+class GreenState(TrafficLightState):
+    def change_state(self, traffic_light: TrafficLight) -> None:
+        print("Green - go!")
+        traffic_light.set_state(YellowState())
+
+
+class YellowState(TrafficLightState):
+    def change_state(self, traffic_light: TrafficLight) -> None:
+        if isinstance(traffic_light.get_prev_state(), GreenState):
+            print("Yellow (from Green to Red) - caution!")
+            traffic_light.set_state(RedState())
+        else:
+            print("Yellow (from Red to Green) - caution!")
+            traffic_light.set_state(GreenState())
+
+
+class RedState(TrafficLightState):
+    def change_state(self, traffic_light: TrafficLight) -> None:
+        print("Red - Stop!")
+        traffic_light.set_state(YellowState())
+
+
+# Client
+light_system: TrafficLight = TrafficLight()
+
+light_system.change()  # Green - Go!
+light_system.change()  # Yellow - Prepare to Stop!
+light_system.change()  # Red - Stop!
+light_system.change()  # Yellow - Prepare to Go!
