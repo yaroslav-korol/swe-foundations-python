@@ -1,4 +1,7 @@
 import time
+from concurrent import futures
+
+import requests
 
 start: float = time.perf_counter()
 
@@ -61,8 +64,6 @@ def imitate_io_job(sec: float):
 
 # USING CONCURRENT FUTURES
 
-from concurrent import futures
-
 # # Manual step-by-step approach
 
 # # Create future objects with 'executor' context manager
@@ -112,7 +113,6 @@ with futures.ThreadPoolExecutor() as executor:
 
 
 # REAL WORLD EXAMPLE
-import requests
 
 img_urls: list[str] = [
     "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759",
