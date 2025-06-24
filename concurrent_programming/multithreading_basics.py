@@ -51,7 +51,7 @@ def imitate_io_job(sec: float):
 #     thread.start()
 #     threads.append(thread)
 
-
+# # Wait until all threads finished work
 # for t in threads:
 #     t.join()
 
