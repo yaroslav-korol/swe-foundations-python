@@ -7,6 +7,8 @@ import requests
 
 # REAL WORLD EXAMPLE - I/O BOUND TASKS - DOWNLOAD IMAGES ASYNCHRONOUSLY
 
+start: float = perf_counter()
+
 img_urls: list[str] = [
     "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759",
     "https://images.unsplash.com/photo-1532009324734-20a7a5813719",
@@ -49,7 +51,7 @@ with futures.ThreadPoolExecutor() as executor:
 #     download_image(image_url=url)
 
 print(
-    f"Total time of {len(img_urls)} ASYNCHRONOUS images download: {time.perf_counter() - start} seconds"
+    f"Total time of {len(img_urls)} ASYNCHRONOUS images download: {perf_counter() - start} seconds"
 )
 
 
