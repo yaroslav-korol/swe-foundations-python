@@ -1,6 +1,7 @@
 import math
 import threading
 from concurrent import futures
+from pathlib import Path
 from time import perf_counter
 
 import requests
@@ -28,13 +29,19 @@ img_urls: list[str] = [
 ]
 
 
-def download_image(image_url: str) -> int:
-    response_binary = requests.get(url=image_url).content
-    image_name: str = f"{image_url.split('/')[3]}.jpg"
+def download_image(image_url: str, folder_name: str = "raw_images") -> int:
+    # Create folder path
+    folder_path = Path(folder_name)
+    folder_path.mkdir(parents=True, exist_ok=True)
 
-    with open(image_name, "wb") as downloaded_image:
-        downloaded_image.write(response_binary)
-        print(f"{image_name} downloaded successfully")
+    # Extract image name
+    image_name = f"{image_url.split('/')[3]}.jpg"
+    image_path = folder_path / image_name  # Join folder and filename
+
+    # Download and save the image
+    response_binary = requests.get(url=image_url).content
+    image_path.write_bytes(response_binary)
+    print(f"{image_path} downloaded successfully")
 
     return 0
 
