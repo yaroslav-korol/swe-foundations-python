@@ -24,7 +24,7 @@ def imitate_io_job(sec: float):
 # USING THREADING
 
 
-# Manual step-by-step approach
+# MANUAL STEP-BY-STEP APPROACH
 
 # import threading
 
@@ -44,13 +44,17 @@ def imitate_io_job(sec: float):
 # print(f"Total time of all ASYNCHRONOUS jobs run: {time.perf_counter() - start}")
 
 
-# # Multiple threads generator
+# MULTIPLE THREADS GENERATOR
+
 # threads: list = []
 
 # for _ in range(10):
 #     thread = threading.Thread(target=imitate_io_job, args=[1.5])
-#     thread.start()
 #     threads.append(thread)
+
+# Start threads in a separate loop to allow them to run concurrently before joining
+# for t in threads:
+#     t.start()
 
 # # Wait until all threads finished work
 # for t in threads:
@@ -62,7 +66,7 @@ def imitate_io_job(sec: float):
 
 # USING CONCURRENT FUTURES
 
-# # Manual step-by-step approach
+# MANUAL STEP-BY-STEP APPROACH
 
 # # Create future objects with 'executor' context manager
 # with futures.ThreadPoolExecutor() as executor:
@@ -77,7 +81,8 @@ def imitate_io_job(sec: float):
 # print(f"Total time of all ASYNCHRONOUS jobs run: {time.perf_counter() - start}")
 
 
-# # Multiple threads generator
+# MULTIPLE THREADS GENERATOR
+
 # with futures.ThreadPoolExecutor() as executor:
 #     seconds: list = [5, 4, 3, 2, 1]
 #     results: list = [executor.submit(imitate_io_job, sec) for sec in seconds]
@@ -97,7 +102,7 @@ def imitate_io_job(sec: float):
 # print(f"Total time of all ASYNCHRONOUS jobs run: {time.perf_counter() - start}")
 
 
-# Efficient method for creating multiple threads using 'MAP' method
+# EFFICIENT METHOD FOR CREATING MULTIPLE THREADS USING 'MAP' METHOD
 
 with futures.ThreadPoolExecutor() as executor:
     seconds: list = [5, 4, 3, 2, 1]

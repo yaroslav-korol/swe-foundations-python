@@ -30,7 +30,11 @@ def do_sync_computations():
 # BASIC MULTITHREADING EXAMPLE
 
 
-# threads = [threading.Thread(target=do_sync_computations).start() for _ in range(ITERATIONS_CNT)]
+# threads = [threading.Thread(target=do_sync_computations) for _ in range(ITERATIONS_CNT)]
+
+# # Start threads in a separate loop to allow them to run concurrently before joining
+# for thread in threads:
+#     thread.start()
 
 
 # MULTITHREADING EXAMPLE USING LOCKS - FIXING PRINTING ISSUE
@@ -63,9 +67,13 @@ def do_async_computations_with_print_lock():
 
 
 # threads = [
-#     threading.Thread(target=do_async_computations_with_print_lock).start()
+#     threading.Thread(target=do_async_computations_with_print_lock)
 #     for _ in range(ITERATIONS_CNT)
 # ]
+
+# Start threads in a separate loop to allow them to run concurrently before joining
+# for thread in threads:
+#     thread.start()
 
 
 # MULTITHREADING EXAMPLE USING LOCKS - FIXING 'result_sum' ISSUE
@@ -97,10 +105,13 @@ def do_async_computations_with_computation_lock():
 
 
 # threads = [
-#     threading.Thread(target=do_async_computations_with_computation_lock).start()
+#     threading.Thread(target=do_async_computations_with_computation_lock)
 #     for _ in range(ITERATIONS_CNT)
 # ]
 
+# Start threads in a separate loop to allow them to run concurrently before joining
+# for thread in threads:
+#     thread.start()
 
 # MULTITHREADING EXAMPLE USING 'THREAD FUZZING' TECHNIQUE
 
@@ -144,9 +155,13 @@ def do_async_computations_with_fuzzing():
 
 
 # threads = [
-#     threading.Thread(target=do_async_computations_with_fuzzing).start()
+#     threading.Thread(target=do_async_computations_with_fuzzing)
 #     for _ in range(ITERATIONS_CNT)
 # ]
+
+# Start threads in a separate loop to allow them to run concurrently before joining
+# for thread in threads:
+#     thread.start()
 
 
 # if __name__ == "__main__":
@@ -262,10 +277,13 @@ if __name__ == "__main__":
         threading.Thread(target=do_async_computations_no_fuzzing) for _ in range(ITERATIONS_CNT)
     ]
 
+    # Start threads in a separate loop to ensure all are created before any start running
     for thread in threads:
         # Start the threads with some fuzzing between starts
         thread.start()
-        # Wait until all threads finished work
+
+    # Wait until all threads finished work
+    for thread in threads:
         thread.join()
 
     # Wait until all items in the print queue have been processed
