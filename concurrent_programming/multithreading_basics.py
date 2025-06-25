@@ -107,9 +107,11 @@ def imitate_io_job(sec: float):
 with futures.ThreadPoolExecutor() as executor:
     seconds: list = [5, 4, 3, 2, 1]
 
-    # # RETURNS: Results of function execution (return value / object)
-    # results: list = executor.map(imitate_io_job, seconds)
+    # RETURNS: Results of function execution (return value / object)
+    results: list = executor.map(imitate_io_job, seconds)
 
-    # # It prints results in order of job running
-    # for result in results:
-    #     print(result)
+    # Prints the results in order of job running
+    for result in results:
+        print(result)
+
+print(f"Total time of all ASYNCHRONOUS jobs run: {time.perf_counter() - start}")
