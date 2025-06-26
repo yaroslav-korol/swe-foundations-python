@@ -1,4 +1,3 @@
-# import threading
 from multiprocessing import Pool
 from pathlib import Path
 from random import randint, seed
